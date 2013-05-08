@@ -8,6 +8,8 @@ use warnings;
 use Data::Dumper;
 
 use read_mol2;
+use get_atom_parameter;
+
 
 #take file names
 if (@ARGV == 2) {
@@ -47,3 +49,6 @@ my $dzs = ($_[0]{'z'}-$_[1]{'z'})**2;
 return $dxs+$dys+$dzs;
 }
 
+#simple parameter get:
+$par = get_atom_parameter::get_atom_parameter('C', 'radius');
+print $par, "\n";
