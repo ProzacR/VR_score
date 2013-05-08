@@ -1,24 +1,25 @@
-#!/usr/bin/perl
+package read_mol2;
+
 #
 # simple *.mol2 file reader
 # http://www.tripos.com/data/support/mol2.pdf
 #
 # VR
 
-#use warnings;
+use warnings;
 use Data::Dumper;
 
 
-#take file name
-if (@ARGV == 1) {
-$file = $ARGV[0];
-} else {
-die("usage: read_mol2.pl file.mol2");
-}
+##take file name
+#if (@ARGV == 1) {
+#$file = $ARGV[0];
+#} else {
+#die("usage: read_mol2.pl file.mol2");
+#}
 
-
+sub read_mol2 {
 #read file into lines
-open(INFO, $file) or die("Could not open file.");
+open(INFO, $_[0]) or die("Could not open file.");
 while(<INFO>) {
  push (@lines, $_);
 }
@@ -28,21 +29,21 @@ close(INFO);
 
 $line_number=0;
 #skip to first @<TRIPOS>MOLECULE
-while(!(@lines[$line_number] =~ /MOLECULE/)) {
+while(!($lines[$line_number] =~ /MOLECULE/)) {
 #just ignore comments and empty lines
 #print STDERR "comment: ", @lines[$line_number];
 $line_number++;
 }
 $line_number++;
 #read MOLECULE part (dump for now)
-while(!(@lines[$line_number] =~ /ATOM/)) {
+while(!($lines[$line_number] =~ /ATOM/)) {
 #print STDERR "molecule: ", @lines[$line_number];
 $line_number++;
 }
 $line_number++;
 $x=0;
 #read ATOM part to data structure
-while(!(@lines[$line_number] =~ /BOND/)) {
+while(!($lines[$line_number] =~ /BOND/)) {
 #print STDERR "atom: ", @lines[$line_number];
 #split lines into symbols
 push @{$atoms[$x]}, split(/ +/, $lines[$line_number]);
@@ -50,7 +51,7 @@ $x++;
 $line_number++;
 }
 $line_number++;
-print Dumper \@atoms[0];
+#print Dumper \@atoms[0];
 #ignore BOND part for now....
 
 
@@ -97,4 +98,7 @@ $atom[$x]{'status_bit'} = @{$atoms[$x]}[10];
 $x++;
 }
 
-print Dumper \@atom[0];
+return @atom;
+}
+#print Dumper \@atom[0];
+1;
