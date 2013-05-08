@@ -26,24 +26,24 @@ print STDERR "readling ligand....\n";
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
 
 
-#print distance($ligand_atom[$0], $protein_atom[$0]);
-
-#electrostatic
+#electrostatic force
 $x=0;
 while($ligand_atom[$x]) {
  $y=0;
  while($protein_atom[$y]) {
-
+ $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/distance_sqared($ligand_atom[$x],$protein_atom[$y]);
  $y++;
  }
 $x++;
 }
+print "Electrostatic force: ", $F, "\n";
+
 
 #distance between atoms
-sub distance {
-my $dxs = ($_[0]['x']-$_[1]['x'])**2;
-my $dys = ($_[0]['y']-$_[1]['y'])**2;
-my $dzs = ($_[0]['z']-$_[1]['z'])**2;
-return sqrt($dxs+$dys+$dzs);
+sub distance_sqared {
+my $dxs = ($_[0]{'x'}-$_[1]{'x'})**2;
+my $dys = ($_[0]{'y'}-$_[1]{'y'})**2;
+my $dzs = ($_[0]{'z'}-$_[1]{'z'})**2;
+return $dxs+$dys+$dzs;
 }
 
