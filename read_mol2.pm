@@ -19,6 +19,7 @@ use Data::Dumper;
 
 sub read_mol2 {
 #read file into lines
+@lines = '';
 open(INFO, $_[0]) or die("Could not open file.");
 while(<INFO>) {
  push (@lines, $_);
@@ -37,12 +38,14 @@ $line_number++;
 $line_number++;
 #read MOLECULE part (dump for now)
 while(!($lines[$line_number] =~ /ATOM/)) {
-#print STDERR "molecule: ", @lines[$line_number];
+print STDERR "molecule: ", $lines[$line_number];
 $line_number++;
 }
 $line_number++;
 $x=0;
 #read ATOM part to data structure
+my @atoms;
+my @atom;
 while(!($lines[$line_number] =~ /BOND/)) {
 #print STDERR "atom: ", @lines[$line_number];
 #split lines into symbols
