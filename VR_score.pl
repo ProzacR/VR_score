@@ -134,3 +134,46 @@ $x++;
 print "Hydrophobic: ", $hydrophobic, "\n";
 
 
+#ligand as hydrogen bond donor
+$x=0;
+while($d[$x]) {
+ $y=0;
+ if (($ligand_atom[$x]{'charge'}>0.1) &&($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
+  while($d[$x][$y]) {
+   if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
+    if ($d[$x][$y]<-0.7) {
+      $hydrogenbd++;
+     } elsif ($d[$x][$y]<0) {
+      $hydrogenbd += -1.45*$d[$x][$y]; #so linearly interpolated
+     }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+print "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
+
+
+#ligand as hydrogen bond acceptor
+$x=0;
+while($d[$x]) {
+ $y=0;
+ if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
+  while($d[$x][$y]) {
+   if (($protein_atom[$y]{'charge'}>0.1) &&($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
+    if ($d[$x][$y]<-0.7) {
+      $hydrogenba++;
+     } elsif ($d[$x][$y]<0) {
+      $hydrogenba += -1.45*$d[$x][$y]; #so linearly interpolated
+     }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+print "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
+
+
+
