@@ -10,6 +10,8 @@ use Data::Dumper;
 use read_mol2;
 use get_atom_parameter;
 
+use constant e_math => 2.71828;
+
 
 #take file names
 if (@ARGV == 2) {
@@ -52,6 +54,7 @@ return $dxs+$dys+$dzs;
 
 #calculate d matrix (d values)
 #d=distance-R_ligand_atom-R_protein_atom
+print STDERR "calculating d";
 $x=0;
 while($ligand_atom[$x]) {
  #print STDERR $ligand_atom[$x]{'atom_type'}[0];
@@ -63,7 +66,9 @@ while($ligand_atom[$x]) {
  $y++;
  }
 $x++;
+print STDERR ".";
 }
+print STDERR "OK\n";
 #print STDERR Dumper \@d
 
 
@@ -81,5 +86,30 @@ $x++;
 }
 print "Repulsion: ", $repulsion, "\n";
 
+
+#calculate Gauss1
+$x=0;
+while($d[$x]) {
+ $y=0;
+ while($d[$x][$y]) {
+ $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
+ $y++;
+ }
+$x++;
+}
+print "Gauss1: ", $Gauss1, "\n";
+
+
+#calculate Gauss2
+$x=0;
+while($d[$x]) {
+ $y=0;
+ while($d[$x][$y]) {
+ $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
+ $y++;
+ }
+$x++;
+}
+print "Gauss2: ", $Gauss2, "\n";
 
 
