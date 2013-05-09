@@ -113,3 +113,23 @@ $x++;
 print "Gauss2: ", $Gauss2, "\n";
 
 
+#calculate hydrophobic
+$x=0;
+#FIXME
+while($d[$x]) {
+ $y=0;
+ #if $x hydrophobic atom:
+ while($d[$x][$y]) {
+  #just if $y hydrophobic atom:
+  if ($d[$x][$y]<0.5) {
+  $hydrophobic++;
+  } elseif ($d[$x][$y]<1.5) {
+  $hydrophobic += -$d[$x][$y]+1.5; #so linearly interpolated
+  }
+ $y++;
+ }
+$x++;
+}
+print "Hydrophobic: ", $hydrophobic, "\n";
+
+
