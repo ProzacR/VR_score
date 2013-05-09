@@ -50,5 +50,12 @@ return $dxs+$dys+$dzs;
 }
 
 #simple parameter get:
-$par = get_atom_parameter::get_atom_parameter('C', 'radius');
+$x=0;
+while($ligand_atom[$x]) {
+print $ligand_atom[$x]{'atom_type'}[0];
+$par = get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius');
 print $par, "\n";
+
+$x++;
+}
+

@@ -82,7 +82,7 @@ $atom[$x]{'y'} = @{$atoms[$x]}[4];
 $atom[$x]{'z'} = @{$atoms[$x]}[5];
 
 # atom_type (string) = the SYBYL atom type for the atom
-$atom[$x]{'atom_type'} = @{$atoms[$x]}[6];
+push @{$atom[$x]{'atom_type'}}, split('\.', @{$atoms[$x]}[6]);
 
 # subst_id (integer) = the ID number of the substructure containing the
 # atom.
@@ -101,7 +101,8 @@ $atom[$x]{'status_bit'} = @{$atoms[$x]}[10];
 $x++;
 }
 
+#print STDERR Dumper \$atom[0];
 return @atom;
 }
-#print Dumper \@atom[0];
+
 1;
