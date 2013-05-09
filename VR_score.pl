@@ -49,13 +49,37 @@ my $dzs = ($_[0]{'z'}-$_[1]{'z'})**2;
 return $dxs+$dys+$dzs;
 }
 
-#simple parameter get:
+
+#calculate d matrix (d values)
+#d=distance-R_ligand_atom-R_protein_atom
 $x=0;
 while($ligand_atom[$x]) {
-print $ligand_atom[$x]{'atom_type'}[0];
-$par = get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius');
-print $par, "\n";
-
+ #print STDERR $ligand_atom[$x]{'atom_type'}[0];
+ $y=0;
+ while($protein_atom[$y]) {
+ $d[$x][$y] = sqrt(distance_sqared($ligand_atom[$x],$protein_atom[$y])) 
+ - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
+ - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
+ $y++;
+ }
 $x++;
 }
+#print STDERR Dumper \@d
+
+
+#calculate repulsion
+$x=0;
+while($d[$x]) {
+ $y=0;
+ while($d[$x][$y]) {
+  if ($d[$x][$y]<0) {
+  $repulsion += $d[$x][$y]**2;
+  }
+ $y++;
+ }
+$x++;
+}
+print "Repulsion: ", $repulsion, "\n";
+
+
 
