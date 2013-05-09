@@ -115,18 +115,19 @@ print "Gauss2: ", $Gauss2, "\n";
 
 #calculate hydrophobic
 $x=0;
-#FIXME
 while($d[$x]) {
  $y=0;
- #if $x hydrophobic atom:
- while($d[$x][$y]) {
-  #just if $y hydrophobic atom:
-  if ($d[$x][$y]<0.5) {
-  $hydrophobic++;
-  } elseif ($d[$x][$y]<1.5) {
-  $hydrophobic += -$d[$x][$y]+1.5; #so linearly interpolated
+ if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
+  while($d[$x][$y]) {
+   if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
+    if ($d[$x][$y]<0.5) {
+      $hydrophobic++;
+     } elsif ($d[$x][$y]<1.5) {
+      $hydrophobic += -$d[$x][$y]+1.5; #so linearly interpolated
+     }
+   }
+   $y++;
   }
- $y++;
  }
 $x++;
 }
