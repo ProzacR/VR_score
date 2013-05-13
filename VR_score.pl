@@ -21,6 +21,7 @@ $ligand = $ARGV[1];
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
 }
 
+
 #parse files
 print STDERR "reading protein...\n";
 @protein_atom = read_mol2::read_mol2($protein);
@@ -30,17 +31,9 @@ print STDERR "readling ligand....\n";
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
 
 
-#electrostatic force
-$x=0;
-while($ligand_atom[$x]) {
- $y=0;
- while($protein_atom[$y]) {
- $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/distance_sqared($ligand_atom[$x],$protein_atom[$y]);
- $y++;
- }
-$x++;
-}
-print "Electrostatic force: ", $F, "\n";
+#score ligand pose in protein:
+%points = score();
+print STDERR Dumper \%points;
 
 
 #distance between atoms
@@ -52,9 +45,12 @@ return $dxs+$dys+$dzs;
 }
 
 
+#scoring function
+sub score {
 #calculate d matrix (d values)
 #d=distance-R_ligand_atom-R_protein_atom
 print STDERR "calculating d";
+my @d;
 $x=0;
 while($ligand_atom[$x]) {
  #print STDERR $ligand_atom[$x]{'atom_type'}[0];
@@ -72,10 +68,25 @@ print STDERR "OK\n";
 #print STDERR Dumper \@d
 
 
-#calculate repulsion
+#electrostatic force
+my $F;
 $x=0;
-while($d[$x]) {
+while($ligand_atom[$x]) {
  $y=0;
+ while($protein_atom[$y]) {
+ $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/distance_sqared($ligand_atom[$x],$protein_atom[$y]);
+ $y++;
+ }
+$x++;
+}
+print STDERR "Electrostatic force: ", $F, "\n";
+
+
+#calculate repulsion
+$x = 0;
+my $repulsion;
+while($d[$x]) {
+ $y = 0;
  while($d[$x][$y]) {
   if ($d[$x][$y]<0) {
   $repulsion += $d[$x][$y]**2;
@@ -84,46 +95,49 @@ while($d[$x]) {
  }
 $x++;
 }
-print "Repulsion: ", $repulsion, "\n";
+print STDERR "Repulsion: ", $repulsion, "\n";
 
 
 #calculate Gauss1
-$x=0;
+$x = 0;
+my $Gauss1;
 while($d[$x]) {
- $y=0;
+ $y = 0;
  while($d[$x][$y]) {
  $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
  $y++;
  }
 $x++;
 }
-print "Gauss1: ", $Gauss1, "\n";
+print STDERR "Gauss1: ", $Gauss1, "\n";
 
 
 #calculate Gauss2
-$x=0;
+$x = 0;
+my $Gauss2;
 while($d[$x]) {
- $y=0;
+ $y = 0;
  while($d[$x][$y]) {
  $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
  $y++;
  }
 $x++;
 }
-print "Gauss2: ", $Gauss2, "\n";
+print STDERR "Gauss2: ", $Gauss2, "\n";
 
 
 #calculate hydrophobic
-$x=0;
+$x = 0;
+my $hydrophobic;
 while($d[$x]) {
- $y=0;
+ $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
   while($d[$x][$y]) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
-    if ($d[$x][$y]<0.5) {
+    if ($d[$x][$y] < 0.5) {
       $hydrophobic++;
-     } elsif ($d[$x][$y]<1.5) {
-      $hydrophobic += -$d[$x][$y]+1.5; #so linearly interpolated
+     } elsif ($d[$x][$y] < 1.5) {
+      $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
      }
    }
    $y++;
@@ -131,20 +145,21 @@ while($d[$x]) {
  }
 $x++;
 }
-print "Hydrophobic: ", $hydrophobic, "\n";
+print STDERR "Hydrophobic: ", $hydrophobic, "\n";
 
 
 #ligand as hydrogen bond donor
-$x=0;
+$x = 0;
+my $hydrogenbd;
 while($d[$x]) {
- $y=0;
- if (($ligand_atom[$x]{'charge'}>0.1) &&($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
+ $y = 0;
+ if (($ligand_atom[$x]{'charge'} > 0.1) &&($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
-    if ($d[$x][$y]<-0.7) {
+    if ($d[$x][$y] < -0.7) {
       $hydrogenbd++;
-     } elsif ($d[$x][$y]<0) {
-      $hydrogenbd += -1.45*$d[$x][$y]; #so linearly interpolated
+     } elsif ($d[$x][$y] < 0) {
+      $hydrogenbd += -1.45 * $d[$x][$y]; #so linearly interpolated
      }
    }
    $y++;
@@ -152,20 +167,21 @@ while($d[$x]) {
  }
 $x++;
 }
-print "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
+print STDERR "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
 
 
 #ligand as hydrogen bond acceptor
-$x=0;
+$x = 0;
+my $hydrogenba;
 while($d[$x]) {
- $y=0;
+ $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
   while($d[$x][$y]) {
-   if (($protein_atom[$y]{'charge'}>0.1) &&($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-    if ($d[$x][$y]<-0.7) {
+   if (($protein_atom[$y]{'charge'} > 0.1) &&($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
+    if ($d[$x][$y] < -0.7) {
       $hydrogenba++;
-     } elsif ($d[$x][$y]<0) {
-      $hydrogenba += -1.45*$d[$x][$y]; #so linearly interpolated
+     } elsif ($d[$x][$y] < 0) {
+      $hydrogenba += -1.45 * $d[$x][$y]; #so linearly interpolated
      }
    }
    $y++;
@@ -173,7 +189,11 @@ while($d[$x]) {
  }
 $x++;
 }
-print "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
+print STDERR "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
 
 
-
+#return sore
+%score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
+"Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen1" => $hydrogenba);
+return %score;
+}
