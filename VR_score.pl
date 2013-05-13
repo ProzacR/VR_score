@@ -31,9 +31,11 @@ print STDERR "readling ligand....\n";
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
 
 
+
 #score ligand pose in protein:
 %points = score();
-print "Final score: ", $points{'Combined'}, "\n";
+print "Score: ", $points{'Combined'}, "\n";
+move_ligand('x');
 
 
 ##############################
@@ -41,6 +43,18 @@ print "Final score: ", $points{'Combined'}, "\n";
 # subroutines here
 #
 ##############################
+
+
+#move ligand
+#use ex. move_ligand('x')
+sub move_ligand {
+$x = 0;
+while ($ligand_atom[$x]{$_[0]}) {
+ $ligand_atom[$x]{$_[0]}++;
+ $x++;
+}
+return 1;
+}
 
 
 #distance between atoms
@@ -96,7 +110,7 @@ while($ligand_atom[$x]) {
  }
 $x++;
 }
-print STDERR "Electrostatic force: ", $F, "\n";
+#print STDERR "Electrostatic force: ", $F, "\n";
 
 
 #calculate repulsion
@@ -112,7 +126,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Repulsion: ", $repulsion, "\n";
+#print STDERR "Repulsion: ", $repulsion, "\n";
 
 
 #calculate Gauss1
@@ -126,7 +140,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Gauss1: ", $Gauss1, "\n";
+#print STDERR "Gauss1: ", $Gauss1, "\n";
 
 
 #calculate Gauss2
@@ -140,7 +154,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Gauss2: ", $Gauss2, "\n";
+#print STDERR "Gauss2: ", $Gauss2, "\n";
 
 
 #calculate hydrophobic
@@ -162,7 +176,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Hydrophobic: ", $hydrophobic, "\n";
+#print STDERR "Hydrophobic: ", $hydrophobic, "\n";
 
 
 #ligand as hydrogen bond donor
@@ -184,7 +198,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
+#print STDERR "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
 
 
 #ligand as hydrogen bond acceptor
@@ -206,7 +220,7 @@ while($d[$x]) {
  }
 $x++;
 }
-print STDERR "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
+#print STDERR "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
 
 
 #return sore
@@ -218,7 +232,7 @@ foreach my $key ( keys %score )
 {
    $all += $score{$key} * $Weight{$key};
 }
-print STDERR "Combined: ", $all, "\n";
+#print STDERR "Combined: ", $all, "\n";
 $score{'Combined'} = $all;
 return %score;
 }
