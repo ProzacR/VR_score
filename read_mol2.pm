@@ -38,7 +38,7 @@ $line_number++;
 $line_number++;
 #read MOLECULE part (dump for now)
 while(!($lines[$line_number] =~ /ATOM/)) {
-print STDERR "molecule: ", $lines[$line_number];
+#print STDERR "molecule: ", $lines[$line_number];
 $line_number++;
 }
 $line_number++;
