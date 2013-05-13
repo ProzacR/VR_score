@@ -82,11 +82,11 @@ sub score {
 #lower means better:
 %Weight  = (
           'Repulsion' => 1,
-          'Gauss1' => -1,
-          'Hydrophobic' => -1,
+          'Gauss1' => -1e-2,
+          'Hydrophobic' => -1e-1,
           'hydrogen1' => -1,
           'hydrogen2' => -1,
-          'Gauss2' => -1,
+          'Gauss2' => -1e-3,
           'Electrostatic' => 1 #negative means good
            );
 
@@ -239,11 +239,12 @@ $x++;
 #return sore
 my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
 "Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen2" => $hydrogenba);
-#combined score
+#* by Weight and combined score
 my $all;
 foreach my $key ( keys %score )
 {
-   $all += $score{$key} * $Weight{$key};
+   $score{$key} *= $Weight{$key};
+   $all += $score{$key};
 }
 #print STDERR "Combined: ", $all, "\n";
 $score{'Combined'} = $all;
