@@ -33,7 +33,14 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 #score ligand pose in protein:
 %points = score();
-print STDERR Dumper \%points;
+print "Final score: ", $points{'Combined'}, "\n";
+
+
+##############################
+#
+# subroutines here
+#
+##############################
 
 
 #distance between atoms
@@ -47,6 +54,16 @@ return $dxs+$dys+$dzs;
 
 #scoring function
 sub score {
+%Weight  = (
+          'Repulsion' => 1,
+          'Gauss1' => 1,
+          'Hydrophobic' => 1,
+          'hydrogen1' => 1,
+          'Gauss2' => 1,
+          'Electrostatic' => 1
+           );
+
+
 #calculate d matrix (d values)
 #d=distance-R_ligand_atom-R_protein_atom
 print STDERR "calculating d";
@@ -193,7 +210,15 @@ print STDERR "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
 
 
 #return sore
-%score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
+my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
 "Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen1" => $hydrogenba);
+#combined score
+my $all;
+foreach my $key ( keys %score )
+{
+   $all += $score{$key} * $Weight{$key};
+}
+print STDERR "Combined: ", $all, "\n";
+$score{'Combined'} = $all;
 return %score;
 }
