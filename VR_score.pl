@@ -36,8 +36,11 @@ $main = 0;
 while ($main < 6) {
 #score ligand pose in protein:
 %points = score();
-print "Score: ", $points{'Combined'}, "\n";
-move_ligand('x', 'n');
+while (($key, $value) = each %points)
+{
+  print "$key", " ", $value, "\n";
+}
+move_ligand('x', 'p');
 $main++;
 }
 
@@ -76,13 +79,15 @@ return $dxs+$dys+$dzs;
 
 #scoring function
 sub score {
+#lower means better:
 %Weight  = (
           'Repulsion' => 1,
-          'Gauss1' => 1,
-          'Hydrophobic' => 1,
-          'hydrogen1' => 1,
-          'Gauss2' => 1,
-          'Electrostatic' => 1
+          'Gauss1' => -1,
+          'Hydrophobic' => -1,
+          'hydrogen1' => -1,
+          'hydrogen2' => -1,
+          'Gauss2' => -1,
+          'Electrostatic' => 1 #negative means good
            );
 
 
@@ -233,7 +238,7 @@ $x++;
 
 #return sore
 my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
-"Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen1" => $hydrogenba);
+"Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen2" => $hydrogenba);
 #combined score
 my $all;
 foreach my $key ( keys %score )
