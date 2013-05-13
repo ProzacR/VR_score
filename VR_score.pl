@@ -25,17 +25,21 @@ die("usage: VR_score.pl protein.mol2 ligand.mol2");
 #parse files
 print STDERR "reading protein...\n";
 @protein_atom = read_mol2::read_mol2($protein);
-print STDERR "readling ligand....\n";
+print STDERR "readling ligand...\n";
 @ligand_atom = read_mol2::read_mol2($ligand);
 #that case probably mol2 files mixed places:
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
 
 
-
+$main = 0;
+#move away check score
+while ($main < 6) {
 #score ligand pose in protein:
 %points = score();
 print "Score: ", $points{'Combined'}, "\n";
 move_ligand('x');
+$main++;
+}
 
 
 ##############################
@@ -48,7 +52,7 @@ move_ligand('x');
 #move ligand
 #use ex. move_ligand('x')
 sub move_ligand {
-$x = 0;
+my $x = 0;
 while ($ligand_atom[$x]{$_[0]}) {
  $ligand_atom[$x]{$_[0]}++;
  $x++;
@@ -83,8 +87,8 @@ sub score {
 print STDERR "calculating d";
 my @d;
 $x=0;
-while($ligand_atom[$x]) {
- #print STDERR $ligand_atom[$x]{'atom_type'}[0];
+while($ligand_atom[$x]{'atom_type'}[0]) {
+ print STDERR $ligand_atom[$x]{'atom_type'}[0];
  $y=0;
  while($protein_atom[$y]) {
  $d[$x][$y] = sqrt(distance_sqared($ligand_atom[$x],$protein_atom[$y])) 
@@ -102,7 +106,7 @@ print STDERR "OK\n";
 #electrostatic force
 my $F;
 $x=0;
-while($ligand_atom[$x]) {
+while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
  while($protein_atom[$y]) {
  $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/distance_sqared($ligand_atom[$x],$protein_atom[$y]);
