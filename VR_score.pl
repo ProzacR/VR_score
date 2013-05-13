@@ -37,7 +37,7 @@ while ($main < 6) {
 #score ligand pose in protein:
 %points = score();
 print "Score: ", $points{'Combined'}, "\n";
-move_ligand('x');
+move_ligand('x', 'n');
 $main++;
 }
 
@@ -50,11 +50,15 @@ $main++;
 
 
 #move ligand
-#use ex. move_ligand('x')
+#use ex. move_ligand('x', 'p')
 sub move_ligand {
+my $p;
 my $x = 0;
 while ($ligand_atom[$x]{$_[0]}) {
- $ligand_atom[$x]{$_[0]}++;
+ # + or - direction?
+ $p = 1 if ($_[1] eq 'p');
+ $p = -1 if ($_[1] eq 'n');
+ $ligand_atom[$x]{$_[0]} += $p;
  $x++;
 }
 return 1;
