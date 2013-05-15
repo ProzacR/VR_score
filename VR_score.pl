@@ -33,7 +33,7 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 $main = 0;
 #move away check score
-while ($main < 6) {
+while ($main < 1) {
 #score ligand pose in protein:
 %points = score();
 while (($key, $value) = each %points)
@@ -91,18 +91,32 @@ sub score {
            );
 
 
+#electrostatic force
+my $F;
+$x=0;
+while($ligand_atom[$x]{'atom_type'}[0]) {
+ $y=0;
+ while($protein_atom[$y]) {
+ $d[$x][$y] = distance_sqared($ligand_atom[$x],$protein_atom[$y]);
+ $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
+ $y++;
+ }
+$x++;
+}
+#print STDERR "Electrostatic force: ", $F, "\n";
+
+
 #calculate d matrix (d values)
 #d=distance-R_ligand_atom-R_protein_atom
 print STDERR "calculating d";
-my @d;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  print STDERR $ligand_atom[$x]{'atom_type'}[0];
  $y=0;
  while($protein_atom[$y]) {
- $d[$x][$y] = sqrt(distance_sqared($ligand_atom[$x],$protein_atom[$y])) 
+ $d[$x][$y] = sqrt($d[$x][$y]) 
  - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
- - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
+ - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if (abs($d[$x][$y]) < 100); 
  $y++;
  }
 $x++;
@@ -110,20 +124,6 @@ print STDERR ".";
 }
 print STDERR "OK\n";
 #print STDERR Dumper \@d
-
-
-#electrostatic force
-my $F;
-$x=0;
-while($ligand_atom[$x]{'atom_type'}[0]) {
- $y=0;
- while($protein_atom[$y]) {
- $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/distance_sqared($ligand_atom[$x],$protein_atom[$y]);
- $y++;
- }
-$x++;
-}
-#print STDERR "Electrostatic force: ", $F, "\n";
 
 
 #calculate repulsion
