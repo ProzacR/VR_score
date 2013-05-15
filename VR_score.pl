@@ -24,16 +24,18 @@ die("usage: VR_score.pl protein.mol2 ligand.mol2");
 
 #parse files
 print STDERR "reading protein...\n";
-($head, $atom) = read_mol2::read_mol2($protein);
+($head, $atom, $foot) = read_mol2::read_mol2($protein);
 @protein_head = @$head;
 @protein_atom = @$atom;
+@protein_foot = @$foot;
 print STDERR "readling ligand...\n";
-($head, $atom) = read_mol2::read_mol2($ligand);
+($head, $atom, $foot) = read_mol2::read_mol2($ligand);
 @ligand_head = @$head;
 @ligand_atom = @$atom;
+@ligand_foot = @$foot;
 #that case probably mol2 files mixed places:
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
-#print STDERR Dumper \@ligand_head;
+print STDERR Dumper \@ligand_head, \@ligand_foot;
 
 
 $main = 0;

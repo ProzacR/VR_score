@@ -32,20 +32,20 @@ my @head;
 $line_number=0;
 #skip to first @<TRIPOS>MOLECULE
 while(!($lines[$line_number] =~ /MOLECULE/)) {
-push @head, @lines[$line_number];
+push @head, $lines[$line_number] if ($lines[$line_number]);
 #print STDERR "comment: ", @lines[$line_number];
 $line_number++;
 }
+push @head, $lines[$line_number];
 $line_number++;
-push @head, @lines[$line_number];
 #read MOLECULE part
 while(!($lines[$line_number] =~ /ATOM/)) {
-push @head, @lines[$line_number];
+push @head, $lines[$line_number];
 #print STDERR "molecule: ", $lines[$line_number];
 $line_number++;
 }
+push @head, $lines[$line_number];
 $line_number++;
-push @head, @lines[$line_number];
 $x=0;
 #read ATOM part to data structure
 my @atoms;
@@ -57,9 +57,7 @@ push @{$atoms[$x]}, split(/ +/, $lines[$line_number]);
 $x++;
 $line_number++;
 }
-$line_number++;
 #print Dumper \@atoms[0];
-#ignore BOND part for now....
 
 
 #make formated hash:
@@ -105,8 +103,17 @@ $atom[$x]{'status_bit'} = @{$atoms[$x]}[10];
 $x++;
 }
 
+
+#read bond part and rest:
+my @foot;
+while($lines[$line_number]) {
+push @foot, $lines[$line_number];
+$line_number++;
+}
+
+
 #print STDERR Dumper \$atom[0];
-return (\@head, \@atom);
+return (\@head, \@atom, \@foot);
 }
 
 1;
