@@ -142,6 +142,7 @@ while($d[$x]) {
  while($d[$x][$y]) {
   if ($d[$x][$y]<0) {
   $repulsion += $d[$x][$y]**2;
+  #print STDERR "ligand atom id $ligand_atom[$x]{'atom_id'} and protein atom id $ligand_atom[$x]{'atom_id'} d value: $d[$x][$y]\n";
   }
  $y++;
  }
@@ -290,7 +291,7 @@ foreach my $line (@ligand_foot) {
 }
 
 #ligand file name
-$name = ">lig_out.mol2";
+$name = ">out_$ligand";
 
 
 #print them
