@@ -17,8 +17,8 @@ use constant e_math => 2.71828;
 if ((@ARGV == 3) || (@ARGV == 2)) {
 $protein = $ARGV[0];
 $ligand = $ARGV[1];
-@move = split /:/, $ARGV[2];
-print Dumper \@move;
+@move = ('x', 'p', 1);
+@move = split /:/, $ARGV[2] if ($ARGV[2]);
 } else {
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
 }
@@ -42,7 +42,7 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 $main = 0;
 #move away check score
-while ($main < 6) {
+while ($main < $move[2]) {
 #score ligand pose in protein:
 %points = score();
 while (($key, $value) = each %points)
@@ -188,12 +188,14 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
   while($d[$x][$y]) {
+   if ($d[$x][$y] < 1.5) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     if ($d[$x][$y] < 0.5) {
       $hydrophobic++;
-     } elsif ($d[$x][$y] < 1.5) {
+     } else {
       $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
      }
+   }
    }
    $y++;
   }
