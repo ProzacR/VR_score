@@ -126,7 +126,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  while($protein_atom[$y]) {
  $d[$x][$y] = sqrt($d[$x][$y]) 
  - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
- - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if (abs($d[$x][$y]) < 100); 
+ - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if ($d[$x][$y] < 100); 
  $y++;
  }
 $x++;
@@ -159,7 +159,7 @@ my $Gauss1;
 while($d[$x]) {
  $y = 0;
  while($d[$x][$y]) {
- $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
+ $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2)) if ($d[$x][$y] < 10);
  $y++;
  }
 $x++;
@@ -173,7 +173,7 @@ my $Gauss2;
 while($d[$x]) {
  $y = 0;
  while($d[$x][$y]) {
- $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
+ $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2)) if ($d[$x][$y] < 10);
  $y++;
  }
 $x++;
