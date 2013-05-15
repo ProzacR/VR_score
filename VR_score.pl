@@ -27,9 +27,9 @@ die("usage: VR_score.pl protein.mol2 ligand.mol2");
 #parse files
 print STDERR "reading protein...\n";
 ($head, $atom, $foot) = read_mol2::read_mol2($protein);
-@protein_head = @$head;
+#@protein_head = @$head;
 @protein_atom = @$atom;
-@protein_foot = @$foot;
+#@protein_foot = @$foot;
 print STDERR "readling ligand...\n";
 ($head, $atom, $foot) = read_mol2::read_mol2($ligand);
 @ligand_head = @$head;
@@ -210,14 +210,16 @@ $x = 0;
 my $hydrogenbd;
 while($d[$x]) {
  $y = 0;
- if (($ligand_atom[$x]{'charge'} > 0.1) &&($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
+ if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
+   if ($d[$x][$y] < 0) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
     if ($d[$x][$y] < -0.7) {
       $hydrogenbd++;
-     } elsif ($d[$x][$y] < 0) {
+     } else {
       $hydrogenbd += -1.45 * $d[$x][$y]; #so linearly interpolated
      }
+   }
    }
    $y++;
   }
@@ -234,12 +236,14 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
   while($d[$x][$y]) {
+   if ($d[$x][$y] < 0) {
    if (($protein_atom[$y]{'charge'} > 0.1) &&($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
     if ($d[$x][$y] < -0.7) {
       $hydrogenba++;
-     } elsif ($d[$x][$y] < 0) {
+     } else {
       $hydrogenba += -1.45 * $d[$x][$y]; #so linearly interpolated
      }
+   }
    }
    $y++;
   }
