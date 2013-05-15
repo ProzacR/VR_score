@@ -28,20 +28,24 @@ close(INFO);
 #print Dumper \@lines;
 
 
+my @head;
 $line_number=0;
 #skip to first @<TRIPOS>MOLECULE
 while(!($lines[$line_number] =~ /MOLECULE/)) {
-#just ignore comments and empty lines
+push @head, @lines[$line_number];
 #print STDERR "comment: ", @lines[$line_number];
 $line_number++;
 }
 $line_number++;
-#read MOLECULE part (dump for now)
+push @head, @lines[$line_number];
+#read MOLECULE part
 while(!($lines[$line_number] =~ /ATOM/)) {
+push @head, @lines[$line_number];
 #print STDERR "molecule: ", $lines[$line_number];
 $line_number++;
 }
 $line_number++;
+push @head, @lines[$line_number];
 $x=0;
 #read ATOM part to data structure
 my @atoms;
@@ -102,7 +106,7 @@ $x++;
 }
 
 #print STDERR Dumper \$atom[0];
-return @atom;
+return (\@head, \@atom);
 }
 
 1;
