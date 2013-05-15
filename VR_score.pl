@@ -14,9 +14,11 @@ use constant e_math => 2.71828;
 
 
 #take file names
-if (@ARGV == 2) {
+if ((@ARGV == 3) || (@ARGV == 2)) {
 $protein = $ARGV[0];
 $ligand = $ARGV[1];
+@move = split /:/, $ARGV[2];
+print Dumper \@move;
 } else {
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
 }
@@ -40,14 +42,14 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 $main = 0;
 #move away check score
-while ($main < 1) {
+while ($main < 6) {
 #score ligand pose in protein:
 %points = score();
 while (($key, $value) = each %points)
 {
   print "$key", " ", $value, "\n";
 }
-move_ligand('x', 'p');
+move_ligand($move[0], $move[1]);
 $main++;
 }
 write_ligand();
