@@ -35,7 +35,7 @@ print STDERR "readling ligand...\n";
 @ligand_foot = @$foot;
 #that case probably mol2 files mixed places:
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
-print STDERR Dumper \@ligand_head, \@ligand_foot;
+#print STDERR Dumper \@ligand_head, \@ligand_foot;
 
 
 $main = 0;
@@ -50,6 +50,7 @@ while (($key, $value) = each %points)
 move_ligand('x', 'p');
 $main++;
 }
+write_ligand();
 
 
 ##############################
@@ -256,4 +257,46 @@ foreach my $key ( keys %score )
 #print STDERR "Combined: ", $all, "\n";
 $score{'Combined'} = $all;
 return %score;
+}
+
+
+#write edited ligand as *.mol2 file
+sub write_ligand {
+#gather lines
+my @lines;
+foreach my $line (@ligand_head) {
+ push @lines, $line;
+}
+$x = 0;
+while ($ligand_atom[$x]{'atom_type'}[0]) {
+$ligand_atom[$x]{'atom_type'}[1]=" " if (!$ligand_atom[$x]{'atom_type'}[1]);
+ $line =    $ligand_atom[$x]{'atom_id'}.' '.
+            $ligand_atom[$x]{'atom_name'}.' '.
+            $ligand_atom[$x]{'x'}.' '.
+            $ligand_atom[$x]{'y'}.' '.
+            $ligand_atom[$x]{'z'}.' '.
+#            $ligand_atom[$x]{'status_bit'}.' '.
+            $ligand_atom[$x]{'atom_type'}[0].'.'.
+            $ligand_atom[$x]{'atom_type'}[1].' '.
+            $ligand_atom[$x]{'subst_id'}.' '.
+            $ligand_atom[$x]{'subst_name'}.' '.
+            $ligand_atom[$x]{'charge'};
+ #print STDERR "$line\n";
+ push @lines, $line;
+ $x++;
+}
+foreach my $line (@ligand_foot) {
+ push @lines, $line;
+}
+
+#ligand file name
+$name = ">lig_out.mol2";
+
+
+#print them
+open (LIGAND, $name) or die('can not write ligand output file');
+foreach my $line (@lines) {
+ print LIGAND $line;
+}
+close(LIGAND);
 }
