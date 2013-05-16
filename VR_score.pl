@@ -9,6 +9,7 @@ use Data::Dumper;
 
 use read_mol2;
 use get_atom_parameter;
+use move;
 
 use constant e_math => 2.71828;
 
@@ -51,7 +52,7 @@ while (($key, $value) = each %points)
 {
   print "$key", " ", $value, "\n";
 }
-move_ligand($move[0], $move[1]);
+move::move_ligand($move[0], $move[1]);
 $main++;
 }
 write_ligand();
@@ -62,22 +63,6 @@ write_ligand();
 # subroutines here
 #
 ##############################
-
-
-#move ligand
-#use ex. move_ligand('0', 'p')
-sub move_ligand {
-my $p;
-my $x = 0;
-while ($ligand_atom_matrix[$x][$_[0]]) {
- # + or - direction?
- $p = 1 if ($_[1] eq 'p');
- $p = -1 if ($_[1] eq 'n');
- $ligand_atom[$x]{$_[0]} += $p;
- $x++;
-}
-return 1;
-}
 
 
 #distance between atoms
