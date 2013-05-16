@@ -15,7 +15,12 @@ if(int(rand(2))) { #so 50/50 chance
  $move[1] = -1;
 }
 #print STDERR Dumper \@move;
-@ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
+if(int(rand(2))) { #so 50/50 chance rotate or move
+ @ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
+} else {
+ @ligand_atom_matrix = move::rotate(\@_, $move[0]);
+}
+
 return @ligand_atom_matrix;
 }
 
@@ -26,12 +31,48 @@ sub move_ligand {
 my $ref = $_[0];
 my $x = 0;
 while ($$ref[$x][$_[1]]) {
- # + or - direction?
  $$ref[$x][$_[1]] += $_[2];
  $x++;
 }
 return @$ref;
 }
 
+
+#rotate ligand
+#use ex. rotate(ligand_ref, x y or z (0 1 or 2))
+sub rotate {
+my $ref = $_[0];
+my $x = 0;
+my $step = 10;
+#if rotx
+if ($_[1] == 0) {
+while ($$ref[$x][0]) {
+ $$ref[$x][1] += ($$ref[$x][1]*cos($step) - $$ref[$x][2]*sin($step));
+ $$ref[$x][2] += ($$ref[$x][1]*sin($step) + $$ref[$x][2]*cos($step));
+ $x++;
+}
+}
+
+#if roty
+if ($_[1] == 1) {
+while ($$ref[$x][0]) {
+ $$ref[$x][0] += ($$ref[$x][0]*cos($step) + $$ref[$x][2]*sin($step));
+ $$ref[$x][2] += (-$$ref[$x][0]*sin($step) + $$ref[$x][2]*cos($step)); 
+ $x++;
+}
+}
+
+
+#if rotz
+if ($_[1] == 2) {
+while ($$ref[$x][0]) {
+ $$ref[$x][0] += ($$ref[$x][0]*cos($step) - $$ref[$x][1]*sin($step));
+ $$ref[$x][1] += ($$ref[$x][0]*sin($step) + $$ref[$x][1]*cos($step)); 
+ $x++;
+}
+}
+
+return @$ref;
+}
 
 1;
