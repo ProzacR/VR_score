@@ -45,15 +45,19 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 #main function
 %toppoints = score();
+while (($key, $value) = each %toppoints)
+{
+  print "$key", " ", $value, "\n";
+}
 $main = 0;
 #move away check score
 while ($main < $move[2]) {
 #score ligand pose in protein and write if better
 %points = score();
-while (($key, $value) = each %points)
-{
-  print "$key", " ", $value, "\n";
-}
+#while (($key, $value) = each %points)
+#{
+#  print "$key", " ", $value, "\n";
+#}
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
 if ($points{'Combined'} < $toppoints{'Combined'}) {
  print STDERR "writing ligand...\n";
@@ -95,11 +99,12 @@ sub score {
            );
 
 
-#electrostatic force and d matrix
+#electrostatic force, d matrix, Gauss and repulsion
 #d=distance-R_ligand_atom-R_protein_atom
 my $F;
 my $Gauss1;
 my $Gauss2;
+my $repulsion;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
@@ -114,31 +119,17 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   if ($d[$x][$y] < 10) {
    $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
    $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
+    if ($d[$x][$y]<0) {
+     #calculate repulsion
+     $repulsion += $d[$x][$y]**2;
+    }
   }
-
  }
  $y++;
  }
 $x++;
 }
-#print STDERR "Electrostatic force: ", $F, "\n";
-
-
-#calculate repulsion
-$x = 0;
-my $repulsion;
-while($d[$x]) {
- $y = 0;
- while($d[$x][$y]) {
-  if ($d[$x][$y]<0) {
-  $repulsion += $d[$x][$y]**2;
-  #print STDERR "ligand atom id $ligand_atom[$x]{'atom_id'} and protein atom id $ligand_atom[$x]{'atom_id'} d value: $d[$x][$y]\n";
-  }
- $y++;
- }
-$x++;
-}
-#print STDERR "Repulsion: ", $repulsion, "\n";
+print STDERR "d size ", $x, " ", $y, "\n";
 
 
 #calculate hydrophobic
