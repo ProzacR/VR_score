@@ -129,7 +129,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  }
 $x++;
 }
-print STDERR "d size ", $x, " ", $y, "\n";
+#print STDERR "d size ", $x, " ", $y, "\n";
 
 
 #calculate hydrophobic
