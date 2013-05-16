@@ -26,6 +26,8 @@ Moving ligand
 ````
 Where:
 x direction (x is 0, y is 1, z is 2)
-s sign (p or n)
+s sign (-1 or 1)
 n number of 1A moves
+(now moves random so just ::n)
+
 

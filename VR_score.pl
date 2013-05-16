@@ -18,7 +18,7 @@ use constant e_math => 2.71828;
 if ((@ARGV == 3) || (@ARGV == 2)) {
 $protein = $ARGV[0];
 $ligand = $ARGV[1];
-@move = (0, 'p', 1);
+@move = (0, 1, 1);
 @move = split /:/, $ARGV[2] if ($ARGV[2]);
 } else {
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
@@ -52,7 +52,8 @@ while (($key, $value) = each %points)
 {
   print "$key", " ", $value, "\n";
 }
-move::move_ligand($move[0], $move[1]);
+@ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
+#print STDERR Dumper \@ligand_atom_matrix[0];
 $main++;
 }
 write_ligand();
@@ -194,7 +195,7 @@ $x++;
 
 #ligand as hydrogen bond donor
 $x = 0;
-my $hydrogenbd;
+my $hydrogenbd = 0;
 while($d[$x]) {
  $y = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
@@ -218,13 +219,13 @@ $x++;
 
 #ligand as hydrogen bond acceptor
 $x = 0;
-my $hydrogenba;
+my $hydrogenba = 0;
 while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
   while($d[$x][$y]) {
    if ($d[$x][$y] < 0) {
-   if (($protein_atom[$y]{'charge'} > 0.1) &&($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
+   if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
     if ($d[$x][$y] < -0.7) {
       $hydrogenba++;
      } else {
