@@ -22,10 +22,10 @@ Test use
 Moving ligand
 ========
 ````bash
- ./VR_score.pl 2HOC_.mol2 ligH.mol2 x:p:2
+ ./VR_score.pl 2HOC_.mol2 ligH.mol2 x:s:n
 ````
 Where:
-x direction (x, y, z)
-p sign (p, n)
-2 number of 1A moves
+x direction (x is 0, y is 1, z is 2)
+s sign (p or n)
+n number of 1A moves
 

@@ -17,7 +17,7 @@ use constant e_math => 2.71828;
 if ((@ARGV == 3) || (@ARGV == 2)) {
 $protein = $ARGV[0];
 $ligand = $ARGV[1];
-@move = ('x', 'p', 1);
+@move = (0, 'p', 1);
 @move = split /:/, $ARGV[2] if ($ARGV[2]);
 } else {
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
@@ -26,14 +26,16 @@ die("usage: VR_score.pl protein.mol2 ligand.mol2");
 
 #parse files
 print STDERR "reading protein...\n";
-($head, $atom, $foot) = read_mol2::read_mol2($protein);
+($head, $atom, $atom_matrix, $foot) = read_mol2::read_mol2($protein);
 #@protein_head = @$head;
 @protein_atom = @$atom;
+@protein_atom_matrix = @$atom_matrix;
 #@protein_foot = @$foot;
 print STDERR "readling ligand...\n";
-($head, $atom, $foot) = read_mol2::read_mol2($ligand);
+($head, $atom, $atom_matrix, $foot) = read_mol2::read_mol2($ligand);
 @ligand_head = @$head;
 @ligand_atom = @$atom;
+@ligand_atom_matrix = @$atom_matrix;
 @ligand_foot = @$foot;
 #that case probably mol2 files mixed places:
 die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
@@ -63,11 +65,11 @@ write_ligand();
 
 
 #move ligand
-#use ex. move_ligand('x', 'p')
+#use ex. move_ligand('0', 'p')
 sub move_ligand {
 my $p;
 my $x = 0;
-while ($ligand_atom[$x]{$_[0]}) {
+while ($ligand_atom_matrix[$x][$_[0]]) {
  # + or - direction?
  $p = 1 if ($_[1] eq 'p');
  $p = -1 if ($_[1] eq 'n');
@@ -80,9 +82,9 @@ return 1;
 
 #distance between atoms
 sub distance_sqared {
-my $dxs = ($_[0]{'x'}-$_[1]{'x'})**2;
-my $dys = ($_[0]{'y'}-$_[1]{'y'})**2;
-my $dzs = ($_[0]{'z'}-$_[1]{'z'})**2;
+my $dxs = ($_[0][0]-$_[1][0])**2;
+my $dys = ($_[0][1]-$_[1][1])**2;
+my $dzs = ($_[0][2]-$_[1][2])**2;
 return $dxs+$dys+$dzs;
 }
 
@@ -107,7 +109,7 @@ $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
  while($protein_atom[$y]) {
- $d[$x][$y] = distance_sqared($ligand_atom[$x],$protein_atom[$y]);
+ $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
  $y++;
  }
@@ -281,9 +283,9 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
 $ligand_atom[$x]{'atom_type'}[1]=" " if (!$ligand_atom[$x]{'atom_type'}[1]);
  $line =    $ligand_atom[$x]{'atom_id'}.' '.
             $ligand_atom[$x]{'atom_name'}.' '.
-            $ligand_atom[$x]{'x'}.' '.
-            $ligand_atom[$x]{'y'}.' '.
-            $ligand_atom[$x]{'z'}.' '.
+            $ligand_atom_matrix[$x][0].' '.
+            $ligand_atom_matrix[$x][1].' '.
+            $ligand_atom_matrix[$x][2].' '.
 #            $ligand_atom[$x]{'status_bit'}.' '.
             $ligand_atom[$x]{'atom_type'}[0].'.'.
             $ligand_atom[$x]{'atom_type'}[1].' '.

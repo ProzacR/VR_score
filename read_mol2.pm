@@ -50,6 +50,7 @@ $x=0;
 #read ATOM part to data structure
 my @atoms;
 my @atom;
+my @atom_matrix;
 while(!($lines[$line_number] =~ /BOND/)) {
 #print STDERR "atom: ", @lines[$line_number];
 #split lines into symbols
@@ -75,13 +76,13 @@ $atom[$x]{'atom_id'} = @{$atoms[$x]}[1];
 $atom[$x]{'atom_name'} = @{$atoms[$x]}[2];
 
 #
-$atom[$x]{'x'} = @{$atoms[$x]}[3];
+$atom_matrix[$x][0] = @{$atoms[$x]}[3];
 
 #
-$atom[$x]{'y'} = @{$atoms[$x]}[4];
+$atom_matrix[$x][1] = @{$atoms[$x]}[4];
 
 #
-$atom[$x]{'z'} = @{$atoms[$x]}[5];
+$atom_matrix[$x][2] = @{$atoms[$x]}[5];
 
 # atom_type (string) = the SYBYL atom type for the atom
 push @{$atom[$x]{'atom_type'}}, split('\.', @{$atoms[$x]}[6]);
@@ -113,7 +114,7 @@ $line_number++;
 
 
 #print STDERR Dumper \$atom[0];
-return (\@head, \@atom, \@foot);
+return (\@head, \@atom, \@atom_matrix, \@foot);
 }
 
 1;
