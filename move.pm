@@ -15,11 +15,11 @@ if(int(rand(2))) { #so 50/50 chance
  $move[1] = -1;
 }
 #print STDERR Dumper \@move;
-if(int(rand(2))) { #so 50/50 chance rotate or move
+#if(int(rand(2))) { #so 50/50 chance rotate or move
  @ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
-} else {
- @ligand_atom_matrix = move::rotate(\@_, $move[0]);
-}
+#} else {
+# @ligand_atom_matrix = move::rotate_ligand(\@_, 0);
+#}
 
 return @ligand_atom_matrix;
 }
@@ -40,10 +40,11 @@ return @$ref;
 
 #rotate ligand
 #use ex. rotate(ligand_ref, x y or z (0 1 or 2))
-sub rotate {
+sub rotate_ligand {
 my $ref = $_[0];
 my $x = 0;
-my $step = 10;
+my $step = 1;
+
 #if rotx
 if ($_[1] == 0) {
 while ($$ref[$x][0]) {
@@ -72,6 +73,7 @@ while ($$ref[$x][0]) {
 }
 }
 
+#print STDERR Dumper \@$ref;
 return @$ref;
 }
 
