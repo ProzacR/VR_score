@@ -2,6 +2,7 @@ package move;
 
 use warnings;
 use Data::Dumper;
+use Math::Trig;
 
 
 #make random move
@@ -15,11 +16,11 @@ if(int(rand(2))) { #so 50/50 chance
  $move[1] = -1;
 }
 #print STDERR Dumper \@move;
-#if(int(rand(2))) { #so 50/50 chance rotate or move
+if(int(rand(2))) { #so 50/50 chance rotate or move
  @ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
-#} else {
-# @ligand_atom_matrix = move::rotate_ligand(\@_, 0);
-#}
+} else {
+ @ligand_atom_matrix = move::rotate_ligand(\@_, $move[0]);
+}
 
 return @ligand_atom_matrix;
 }
@@ -43,13 +44,13 @@ return @$ref;
 sub rotate_ligand {
 my $ref = $_[0];
 my $x = 0;
-my $step = 1;
+my $step = pi/8;
 
 #if rotx
 if ($_[1] == 0) {
 while ($$ref[$x][0]) {
- $$ref[$x][1] += ($$ref[$x][1]*cos($step) - $$ref[$x][2]*sin($step));
- $$ref[$x][2] += ($$ref[$x][1]*sin($step) + $$ref[$x][2]*cos($step));
+ $$ref[$x][1] = ($$ref[$x][1]*cos($step) - $$ref[$x][2]*sin($step));
+ $$ref[$x][2] = ($$ref[$x][1]*sin($step) + $$ref[$x][2]*cos($step));
  $x++;
 }
 }
@@ -57,8 +58,8 @@ while ($$ref[$x][0]) {
 #if roty
 if ($_[1] == 1) {
 while ($$ref[$x][0]) {
- $$ref[$x][0] += ($$ref[$x][0]*cos($step) + $$ref[$x][2]*sin($step));
- $$ref[$x][2] += (-$$ref[$x][0]*sin($step) + $$ref[$x][2]*cos($step)); 
+ $$ref[$x][0] = ($$ref[$x][0]*cos($step) + $$ref[$x][2]*sin($step));
+ $$ref[$x][2] = (-$$ref[$x][0]*sin($step) + $$ref[$x][2]*cos($step)); 
  $x++;
 }
 }
@@ -67,8 +68,8 @@ while ($$ref[$x][0]) {
 #if rotz
 if ($_[1] == 2) {
 while ($$ref[$x][0]) {
- $$ref[$x][0] += ($$ref[$x][0]*cos($step) - $$ref[$x][1]*sin($step));
- $$ref[$x][1] += ($$ref[$x][0]*sin($step) + $$ref[$x][1]*cos($step)); 
+ $$ref[$x][0] = ($$ref[$x][0]*cos($step) - $$ref[$x][1]*sin($step));
+ $$ref[$x][1] = ($$ref[$x][0]*sin($step) + $$ref[$x][1]*cos($step)); 
  $x++;
 }
 }

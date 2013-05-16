@@ -67,6 +67,7 @@ if ($points{'Combined'} < $toppoints{'Combined'}) {
 #print STDERR Dumper \@ligand_atom_matrix[0];
 $main++;
 }
+#write_ligand();
 
 
 ##############################
@@ -101,10 +102,10 @@ sub score {
 
 #electrostatic force, d matrix, Gauss and repulsion
 #d=distance-R_ligand_atom-R_protein_atom
-my $F;
-my $Gauss1;
-my $Gauss2;
-my $repulsion;
+my $F = 0;
+my $Gauss1 = 0;
+my $Gauss2 = 0;
+my $repulsion = 0;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
@@ -134,7 +135,7 @@ $x++;
 
 #calculate hydrophobic
 $x = 0;
-my $hydrophobic;
+my $hydrophobic = 0;
 while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
