@@ -98,15 +98,25 @@ sub score {
 #electrostatic force and d matrix
 #d=distance-R_ligand_atom-R_protein_atom
 my $F;
+my $Gauss1;
+my $Gauss2;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
- $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
- $d[$x][$y] = sqrt($d[$x][$y]) 
- - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
- - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if ($d[$x][$y] < 100);
+ if ($d[$x][$y] < 100) { #skip very distant atom pairs
+  $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
+  $d[$x][$y] = sqrt($d[$x][$y]) 
+  - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
+  - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
+  #calculate Gauss1 and Gauss2
+  if ($d[$x][$y] < 10) {
+   $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
+   $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
+  }
+
+ }
  $y++;
  }
 $x++;
@@ -129,24 +139,6 @@ while($d[$x]) {
 $x++;
 }
 #print STDERR "Repulsion: ", $repulsion, "\n";
-
-
-#calculate Gauss1 and Gauss2
-$x = 0;
-my $Gauss1;
-my $Gauss2;
-while($d[$x]) {
- $y = 0;
- while($d[$x][$y]) {
- if ($d[$x][$y] < 10) {
- $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
- $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
- }
- $y++;
- }
-$x++;
-}
-#print STDERR "Gauss1: ", $Gauss1, "\n";
 
 
 #calculate hydrophobic
