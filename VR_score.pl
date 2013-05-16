@@ -43,20 +43,26 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 #print STDERR Dumper \@ligand_head, \@ligand_foot;
 
 
+#main function
+%toppoints = score();
 $main = 0;
 #move away check score
 while ($main < $move[2]) {
-#score ligand pose in protein:
-%points = score();
+#score ligand pose in protein and write if better
 while (($key, $value) = each %points)
 {
   print "$key", " ", $value, "\n";
 }
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
+%points = score();
+if ($points{'Combined'} < $toppoints{'Combined'}) {
+ print STDERR "writing ligand...\n";
+ write_ligand();
+ %toppoints = %points;
+}
 #print STDERR Dumper \@ligand_atom_matrix[0];
 $main++;
 }
-write_ligand();
 
 
 ##############################
@@ -287,7 +293,7 @@ foreach my $line (@ligand_foot) {
 }
 
 #ligand file name
-$name = ">out_$ligand";
+$name = ">out_$toppoints{'Combined'}_$ligand";
 
 
 #print them
