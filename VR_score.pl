@@ -95,7 +95,8 @@ sub score {
            );
 
 
-#electrostatic force
+#electrostatic force and d matrix
+#d=distance-R_ligand_atom-R_protein_atom
 my $F;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
@@ -103,31 +104,14 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
+ $d[$x][$y] = sqrt($d[$x][$y]) 
+ - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
+ - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if ($d[$x][$y] < 100);
  $y++;
  }
 $x++;
 }
 #print STDERR "Electrostatic force: ", $F, "\n";
-
-
-#calculate d matrix (d values)
-#d=distance-R_ligand_atom-R_protein_atom
-print STDERR "calculating d";
-$x=0;
-while($ligand_atom[$x]{'atom_type'}[0]) {
- print STDERR $ligand_atom[$x]{'atom_type'}[0];
- $y=0;
- while($protein_atom[$y]) {
- $d[$x][$y] = sqrt($d[$x][$y]) 
- - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
- - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius') if ($d[$x][$y] < 100); 
- $y++;
- }
-$x++;
-print STDERR ".";
-}
-print STDERR "OK\n";
-#print STDERR Dumper \@d
 
 
 #calculate repulsion
