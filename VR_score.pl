@@ -230,7 +230,8 @@ foreach my $line (@ligand_head) {
 $x = 0;
 while ($ligand_atom[$x]{'atom_type'}[0]) {
 $ligand_atom[$x]{'atom_type'}[1]=" " if (!$ligand_atom[$x]{'atom_type'}[1]);
- $line =    $ligand_atom[$x]{'atom_id'}.' '.
+ $line =    ' '.
+            $ligand_atom[$x]{'atom_id'}.' '.
             $ligand_atom[$x]{'atom_name'}.' '.
             $ligand_atom_matrix[$x][0].' '.
             $ligand_atom_matrix[$x][1].' '.
