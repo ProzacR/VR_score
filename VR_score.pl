@@ -11,8 +11,6 @@ use read_mol2;
 use get_atom_parameter;
 use move;
 
-use constant e_math => 2.71828;
-
 
 #take file names
 if ((@ARGV == 3) || (@ARGV == 2)) {
@@ -79,10 +77,10 @@ $main++;
 
 #distance between atoms
 sub distance_sqared {
-my $dxs = ($_[0][0]-$_[1][0])**2;
-my $dys = ($_[0][1]-$_[1][1])**2;
-my $dzs = ($_[0][2]-$_[1][2])**2;
-return $dxs+$dys+$dzs;
+my $dxs = $_[0][0]-$_[1][0];
+my $dys = $_[0][1]-$_[1][1];
+my $dzs = $_[0][2]-$_[1][2];
+return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 }
 
 
@@ -109,17 +107,18 @@ my $repulsion = 0;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
+ my $lig_radius = get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius');
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  if ($d[$x][$y] < 100) { #skip very distant atom pairs
   $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
   $d[$x][$y] = sqrt($d[$x][$y]) 
-  - get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius')
+  - $lig_radius
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 10) {
-   $Gauss1 += e_math ** (-(($d[$x][$y]*2)**2));
-   $Gauss2 += e_math ** (-((($d[$x][$y]-3)/2)**2));
+   $Gauss1 += exp(-(($d[$x][$y]*2)**2));
+   $Gauss2 += exp(-((($d[$x][$y]-3)/2)**2));
     if ($d[$x][$y]<0) {
      #calculate repulsion
      $repulsion += $d[$x][$y]**2;
