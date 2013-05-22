@@ -108,6 +108,7 @@ $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
  my $lig_radius = get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius');
+ die("$ligand_atom[$x]{'atom_type'}[0] radius undefined!") if (!($lig_radius));
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  if ($d[$x][$y] < 100) { #skip very distant atom pairs
