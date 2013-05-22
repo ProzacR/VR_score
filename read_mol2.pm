@@ -25,6 +25,7 @@ while(<INFO>) {
  push (@lines, $_);
 }
 close(INFO);
+die("not mol2 file") if (@lines < 7); #too short
 #print Dumper \@lines;
 
 
