@@ -16,7 +16,7 @@ use move;
 if ((@ARGV == 3) || (@ARGV == 2)) {
 $protein = $ARGV[0];
 $ligand = $ARGV[1];
-@move = (0, 1, 1);
+@move = (0, 0, 0);
 @move = split /:/, $ARGV[2] if ($ARGV[2]);
 } else {
 die("usage: VR_score.pl protein.mol2 ligand.mol2");
@@ -45,17 +45,17 @@ die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 %toppoints = score();
 while (($key, $value) = each %toppoints)
 {
-  print "$key", " ", $value, "\n";
+  print "$key", " ", $value, " ";
 }
 $main = 0;
 #move away check score
 while ($main < $move[2]) {
 #score ligand pose in protein and write if better
 %points = score();
-#while (($key, $value) = each %points)
-#{
-#  print "$key", " ", $value, "\n";
-#}
+while (($key, $value) = each %points)
+{
+  print "$key", " ", $value, "\n";
+}
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
 if ($points{'Combined'} < $toppoints{'Combined'}) {
  print STDERR "writing ligand...\n";
@@ -88,13 +88,13 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 sub score {
 #lower means better:
 %Weight  = (
-          'Repulsion' => 1,
-          'Gauss1' => -1e-2,
-          'Hydrophobic' => -1e-1,
-          'hydrogen1' => -1,
-          'hydrogen2' => -1,
-          'Gauss2' => -1e-3,
-          'Electrostatic' => 1 #negative means good
+          'Repulsion' => 1, #fixme
+          'Gauss1' => -5e-2,
+          'Hydrophobic' => -3e-2,
+          'hydrogen1' => -2,
+          'hydrogen2' => -2,
+          'Gauss2' => -1e-3, #useless
+          'Electrostatic' => 44 #negative means good
            );
 
 
@@ -119,10 +119,11 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 10) {
    $Gauss1 += exp(-(($d[$x][$y]*2)**2));
-   $Gauss2 += exp(-((($d[$x][$y]-3)/2)**2));
-    if ($d[$x][$y]<0) {
+   #$Gauss2 += exp(-((($d[$x][$y]-3)/2)**2));
+    if ($d[$x][$y] < 0) {
      #calculate repulsion
-     $repulsion += $d[$x][$y]**2;
+     $repulsion += $d[$x][$y]**6;
+     #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
   }
  }
