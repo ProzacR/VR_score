@@ -88,11 +88,11 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 sub score {
 #lower means better:
 %Weight  = (
-          'Repulsion' => 1, #fixme
+          'Repulsion' => 0, #do not include into combined
           'Gauss1' => -5e-2,
-          'Hydrophobic' => -3e-2,
-          'hydrogen1' => -2,
-          'hydrogen2' => -2,
+          'Hydrophobic' => 3e-2,
+          'hydrogen1' => 2,
+          'hydrogen2' => 2,
           'Gauss2' => -1e-3, #useless
           'Electrostatic' => 44 #negative means good
            );
