@@ -57,8 +57,8 @@ while (($key, $value) = each %points)
   print "$key", " ", $value, "\n";
 }
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
-if ($points{'Combined'} < $toppoints{'Combined'}) {
- print STDERR "writing ligand...\n";
+if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Repulsion'} < 1)) {
+ print STDERR "\n writing ligand...\n";
  write_ligand();
  %toppoints = %points;
 }
@@ -88,7 +88,7 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 sub score {
 #lower means better:
 %Weight  = (
-          'Repulsion' => 0, #do not include into combined
+          'Repulsion' => 1, #do not include into combined
           'Gauss1' => -5e-2,
           'Hydrophobic' => 3e-2,
           'hydrogen1' => 2,
@@ -214,7 +214,7 @@ my $all;
 foreach my $key ( keys %score )
 {
    $score{$key} *= $Weight{$key};
-   $all += $score{$key};
+   $all += $score{$key} if ($key ne 'Repulsion');
 }
 #print STDERR "Combined: ", $all, "\n";
 $score{'Combined'} = $all;
