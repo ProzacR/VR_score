@@ -76,7 +76,7 @@ $main++;
 
 
 #lower means better:
-my %Weight  = (
+%Weight  = (
           'Repulsion' => 1, #do not include into combined
           'Gauss1' => -9.4e-2,
           'Hydrophobic' => 3.9e-2,
