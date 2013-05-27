@@ -144,9 +144,9 @@ while($d[$x]) {
    if ($d[$x][$y] < 1.5) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
-    #  $hydrophobic++;
+      $hydrophobic++;
     # } else {
-      $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
+    #  $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
     # }
    }
    }
