@@ -90,7 +90,7 @@ sub score {
 %Weight  = (
           'Repulsion' => 1, #do not include into combined
           'Gauss1' => -5e-2,
-          'Hydrophobic' => 3e-2,
+          'Hydrophobic' => 2.5e-2,
           'hydrogen1' => 2,
           'hydrogen2' => 2,
           'Gauss2' => -1e-3, #useless
@@ -141,7 +141,7 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
   while($d[$x][$y]) {
-   if ($d[$x][$y] < 1.5) {
+   if ($d[$x][$y] < 2) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
       $hydrophobic++;
