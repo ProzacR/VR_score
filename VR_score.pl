@@ -5,7 +5,7 @@
 # VR
 
 use warnings;
-use Data::Dumper;
+#use Data::Dumper;
 
 use read_mol2;
 use get_atom_parameter;
@@ -86,15 +86,16 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 #scoring function
 sub score {
+my $all = 3.4; #initial score
 #lower means better:
-%Weight  = (
+my %Weight  = (
           'Repulsion' => 1, #do not include into combined
-          'Gauss1' => -5e-2,
-          'Hydrophobic' => 2.5e-2,
-          'hydrogen1' => 2,
-          'hydrogen2' => 2,
+          'Gauss1' => -9.4e-2,
+          'Hydrophobic' => 3.5e-2,
+          'hydrogen1' => 4.2,
+          'hydrogen2' => 3.7,
           'Gauss2' => -1e-3, #useless
-          'Electrostatic' => 44 #negative means good
+          'Electrostatic' => 76 #negative means good
            );
 
 
@@ -210,7 +211,6 @@ $x++;
 my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
 "Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen2" => $hydrogenba);
 #* by Weight and combined score
-my $all;
 foreach my $key ( keys %score )
 {
    $score{$key} *= $Weight{$key};
