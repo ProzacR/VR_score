@@ -75,6 +75,18 @@ $main++;
 ##############################
 
 
+#lower means better:
+my %Weight  = (
+          'Repulsion' => 1, #do not include into combined
+          'Gauss1' => -9.4e-2,
+          'Hydrophobic' => 3.9e-2,
+          'hydrogen1' => 4.2,
+          'hydrogen2' => 3.7,
+          'Gauss2' => -1e-3, #useless
+          'Electrostatic' => 76 #negative means good
+           );
+
+
 #distance between atoms
 sub distance_sqared {
 my $dxs = $_[0][0]-$_[1][0];
@@ -86,17 +98,7 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 #scoring function
 sub score {
-my $all = 3.4; #initial score
-#lower means better:
-my %Weight  = (
-          'Repulsion' => 1, #do not include into combined
-          'Gauss1' => -9.4e-2,
-          'Hydrophobic' => 3.5e-2,
-          'hydrogen1' => 4.2,
-          'hydrogen2' => 3.7,
-          'Gauss2' => -1e-3, #useless
-          'Electrostatic' => 76 #negative means good
-           );
+my $all = 3; #initial score
 
 
 #electrostatic force, d matrix, Gauss and repulsion
@@ -142,7 +144,7 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
   while($d[$x][$y]) {
-   if ($d[$x][$y] < 2) {
+   if ((0 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
       $hydrophobic++;
