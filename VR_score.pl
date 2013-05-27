@@ -11,6 +11,17 @@ use read_mol2;
 use get_atom_parameter;
 use move;
 
+#Scoring weights:
+%Weight  = (
+          'Repulsion' => 1, #do not include into combined
+          'Gauss1' => -9.4e-2,
+          'Hydrophobic' => 3.9e-2,
+          'hydrogen1' => 4.2,
+          'hydrogen2' => 3.7,
+          'Gauss2' => -1e-3, #useless
+          'Electrostatic' => 76 #negative means good
+           );
+
 
 #take file names
 if ((@ARGV == 3) || (@ARGV == 2)) {
@@ -75,19 +86,9 @@ $main++;
 ##############################
 
 
-#lower means better:
-%Weight  = (
-          'Repulsion' => 1, #do not include into combined
-          'Gauss1' => -9.4e-2,
-          'Hydrophobic' => 3.9e-2,
-          'hydrogen1' => 4.2,
-          'hydrogen2' => 3.7,
-          'Gauss2' => -1e-3, #useless
-          'Electrostatic' => 76 #negative means good
-           );
-
-
 #distance between atoms
+#this one must be called for for each atom pair
+#FIXME has to be faster
 sub distance_sqared {
 my $dxs = $_[0][0]-$_[1][0];
 my $dys = $_[0][1]-$_[1][1];
