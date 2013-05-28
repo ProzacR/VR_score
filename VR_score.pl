@@ -16,8 +16,8 @@ use move;
           'Repulsion' => 1, #do not include into combined
           'Gauss1' => -9.4e-2,
           'Hydrophobic' => 3.9e-2,
-          'hydrogen1' => 4.2,
-          'hydrogen2' => 3.7,
+          'hydrogen1' => 3.3,
+          'hydrogen2' => 1.5,
           'Gauss2' => -1e-3, #useless
           'Electrostatic' => 76 #negative means good
            );
@@ -171,11 +171,11 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if ($d[$x][$y] < 0) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
-    if ($d[$x][$y] < -0.7) {
+    #if ($d[$x][$y] < -0.7) {
       $hydrogenbd++;
-     } else {
-      $hydrogenbd += -1.45 * $d[$x][$y]; #so linearly interpolated
-     }
+    # } else {
+    #  $hydrogenbd += -1.45 * $d[$x][$y]; #so linearly interpolated
+    # }
    }
    }
    $y++;
@@ -195,11 +195,11 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if ($d[$x][$y] < 0) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-    if ($d[$x][$y] < -0.7) {
+    #if ($d[$x][$y] < -0.7) {
       $hydrogenba++;
-     } else {
-      $hydrogenba += -1.45 * $d[$x][$y]; #so linearly interpolated
-     }
+    # } else {
+    #  $hydrogenba += -1.45 * $d[$x][$y]; #so linearly interpolated
+    # }
    }
    }
    $y++;
