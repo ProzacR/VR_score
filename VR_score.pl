@@ -41,7 +41,7 @@ print STDERR "reading protein...\n";
 @protein_atom = @$atom;
 @protein_atom_matrix = @$atom_matrix;
 #@protein_foot = @$foot;
-print STDERR "readling ligand...\n";
+print STDERR "reading ligand...\n";
 ($head, $atom, $atom_matrix, $foot) = read_mol2::read_mol2($ligand);
 @ligand_head = @$head;
 @ligand_atom = @$atom;
@@ -121,9 +121,9 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - $lig_radius
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
-  if ($d[$x][$y] < 10) {
-   $Gauss1 += exp(-(($d[$x][$y]*2)**2));
-   #$Gauss2 += exp(-((($d[$x][$y]-3)/2)**2));
+  if ($d[$x][$y] < 5) {
+   $Gauss1 += exp(-(($d[$x][$y]*2)**2)); #means if abs distance 0 then +1 else +less
+   $Gauss2++ if (($d[$x][$y] < 1) && ($d[$x][$y] > 0)); # count just gap 
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $repulsion++;
