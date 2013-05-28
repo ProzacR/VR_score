@@ -13,13 +13,13 @@ use move;
 
 #Scoring weights:
 %Weight  = (
-          'Repulsion' => 1, #do not include into combined
-          'Gauss1' => -9.4e-2,
-          'Hydrophobic' => 3.9e-2,
-          'hydrogen1' => 3.3,
-          'hydrogen2' => 1.5,
+          'Repulsion' => -1.5e-1,
+          'Gauss1' => -5.9e-2,
+          'Hydrophobic' => 4.3e-2,
+          'hydrogen1' => 3.6,
+          'hydrogen2' => 1.8,
           'Gauss2' => -1e-3, #useless
-          'Electrostatic' => 76 #negative means good
+          'Electrostatic' => 99 #negative means good
            );
 
 
@@ -125,8 +125,9 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
    $Gauss1 += exp(-(($d[$x][$y]*2)**2));
    #$Gauss2 += exp(-((($d[$x][$y]-3)/2)**2));
     if ($d[$x][$y] < 0) {
-     #calculate repulsion
-     $repulsion += $d[$x][$y]**6;
+     #calculate repulsion:
+     $repulsion++;
+     #$repulsion += $d[$x][$y]**6;
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
   }
@@ -217,7 +218,7 @@ my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gaus
 foreach my $key ( keys %score )
 {
    $score{$key} *= $Weight{$key};
-   $all += $score{$key} if ($key ne 'Repulsion');
+   $all += $score{$key};
 }
 #print STDERR "Combined: ", $all, "\n";
 $score{'Combined'} = $all;
