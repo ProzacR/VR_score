@@ -13,13 +13,13 @@ use move;
 
 #Scoring weights:
 %Weight  = (
-          'Contact' => 1,
+          'Contact' => -1.7e-1,
           'Repulsion' => -1.5e-1,
           'Gauss1' => -5.9e-2,
           'Hydrophobic' => 4.3e-2,
           'Hydrogen1' => 3.6,
           'Hydrogen2' => 1.8,
-          'Gauss2' => 1.8e-2,
+          'Gap' => 1.8e-2,
           'Charge' => 99, #negative means good
           'Combined' => 1
            );
@@ -106,11 +106,11 @@ my $all = 1.1;
 %score  = (
           'Contact' => 0,
           'Repulsion' => 0,
-          'Gauss1' => 0,
+          'Gap' => 0,
           'Hydrophobic' => 0,
           'Hydrogen1' => 0,
           'Hydrogen2' => 0,
-          'Gauss2' => 0,
+          'Gauss1' => 0,
           'Charge' => 0,
           'Combined' => 1 #initial value
            );
@@ -133,8 +133,8 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
    $score{'Gauss1'} += exp(-8*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
-   $score{'Gauss2'}++ if ($d[$x][$y] > 0); # count just gap
-   $score{'Contact'}++ if (abs($d[$x][$y]) < 0.5);
+   $score{'Gap'}++ if ($d[$x][$y] > 0); # count just gap
+   $score{'Contact'}++ if (abs($d[$x][$y]) < 0.25);
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
@@ -180,7 +180,7 @@ while($d[$x]) {
  $y = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
-   if ($d[$x][$y] < 0) {
+   if ((0 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
     #if ($d[$x][$y] < -0.7) {
       $score{'Hydrogen1'}++;
