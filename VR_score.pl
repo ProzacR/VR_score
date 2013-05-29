@@ -132,7 +132,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
-   $score{'Gauss1'} += exp(-(($d[$x][$y]*2)**2)); #means if abs distance 0 then +1 else +less
+   $score{'Gauss1'} += exp(-8*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
    $score{'Gauss2'}++ if ($d[$x][$y] > 0); # count just gap
    $score{'Contact'}++ if (abs($d[$x][$y]) < 0.5);
     if ($d[$x][$y] < 0) {
