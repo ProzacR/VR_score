@@ -18,7 +18,7 @@ use move;
           'Hydrophobic' => 4.3e-2,
           'hydrogen1' => 3.6,
           'hydrogen2' => 1.8,
-          'Gauss2' => -1e-3, #useless
+          'Gauss2' => 1.8e-2,
           'Electrostatic' => 99 #negative means good
            );
 
@@ -99,7 +99,7 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 #scoring function
 sub score {
-my $all = 3; #initial score
+my $all = 1.1; #initial score
 
 
 #electrostatic force, d matrix, Gauss and repulsion
@@ -121,9 +121,9 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - $lig_radius
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
-  if ($d[$x][$y] < 5) {
+  if ($d[$x][$y] < 2) {
    $Gauss1 += exp(-(($d[$x][$y]*2)**2)); #means if abs distance 0 then +1 else +less
-   $Gauss2++ if (($d[$x][$y] < 1) && ($d[$x][$y] > 0)); # count just gap 
+   $Gauss2++ if ($d[$x][$y] > 0); # count just gap 
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $repulsion++;
