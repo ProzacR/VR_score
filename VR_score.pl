@@ -13,13 +13,15 @@ use move;
 
 #Scoring weights:
 %Weight  = (
+          'Contact' => 1,
           'Repulsion' => -1.5e-1,
           'Gauss1' => -5.9e-2,
           'Hydrophobic' => 4.3e-2,
-          'hydrogen1' => 3.6,
-          'hydrogen2' => 1.8,
+          'Hydrogen1' => 3.6,
+          'Hydrogen2' => 1.8,
           'Gauss2' => 1.8e-2,
-          'Electrostatic' => 99 #negative means good
+          'Charge' => 99, #negative means good
+          'Combined' => 1
            );
 
 
@@ -99,15 +101,23 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 #scoring function
 sub score {
-my $all = 1.1; #initial score
+#initial score
+my $all = 1.1;
+%score  = (
+          'Contact' => 0,
+          'Repulsion' => 0,
+          'Gauss1' => 0,
+          'Hydrophobic' => 0,
+          'Hydrogen1' => 0,
+          'Hydrogen2' => 0,
+          'Gauss2' => 0,
+          'Charge' => 0,
+          'Combined' => 1 #initial value
+           );
 
 
 #electrostatic force, d matrix, Gauss and repulsion
 #d=distance-R_ligand_atom-R_protein_atom
-my $F = 0;
-my $Gauss1 = 0;
-my $Gauss2 = 0;
-my $repulsion = 0;
 $x=0;
 while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
@@ -116,17 +126,18 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  if ($d[$x][$y] < 100) { #skip very distant atom pairs
-  $F += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
+  $score{'Charge'} += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
   $d[$x][$y] = sqrt($d[$x][$y]) 
   - $lig_radius
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
-   $Gauss1 += exp(-(($d[$x][$y]*2)**2)); #means if abs distance 0 then +1 else +less
-   $Gauss2++ if ($d[$x][$y] > 0); # count just gap 
+   $score{'Gauss1'} += exp(-(($d[$x][$y]*2)**2)); #means if abs distance 0 then +1 else +less
+   $score{'Gauss2'}++ if ($d[$x][$y] > 0); # count just gap
+   $score{'Contact'}++ if (abs($d[$x][$y]) < 0.5);
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
-     $repulsion++;
+     $score{'Repulsion'}++;
      #$repulsion += $d[$x][$y]**6;
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
@@ -149,7 +160,7 @@ while($d[$x]) {
    if ((0 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
-      $hydrophobic++;
+      $score{'Hydrophobic'}++;
     # } else {
     #  $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
     # }
@@ -160,7 +171,6 @@ while($d[$x]) {
  }
 $x++;
 }
-#print STDERR "Hydrophobic: ", $hydrophobic, "\n";
 
 
 #ligand as hydrogen bond donor
@@ -173,7 +183,7 @@ while($d[$x]) {
    if ($d[$x][$y] < 0) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
     #if ($d[$x][$y] < -0.7) {
-      $hydrogenbd++;
+      $score{'Hydrogen1'}++;
     # } else {
     #  $hydrogenbd += -1.45 * $d[$x][$y]; #so linearly interpolated
     # }
@@ -184,7 +194,6 @@ while($d[$x]) {
  }
 $x++;
 }
-#print STDERR "Ligand as hydrogen bond donor: ", $hydrogenbd, "\n";
 
 
 #ligand as hydrogen bond acceptor
@@ -197,7 +206,7 @@ while($d[$x]) {
    if ($d[$x][$y] < 0) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
     #if ($d[$x][$y] < -0.7) {
-      $hydrogenba++;
+      $score{'Hydrogen2'}++;
     # } else {
     #  $hydrogenba += -1.45 * $d[$x][$y]; #so linearly interpolated
     # }
@@ -208,20 +217,14 @@ while($d[$x]) {
  }
 $x++;
 }
-#print STDERR "Ligand as hydrogen bond acceptor: ", $hydrogenba, "\n";
 
 
-#return sore
-my %score = ("Electrostatic" => $F, "Repulsion" => $repulsion, "Gauss1" => $Gauss1, "Gauss2" => $Gauss2,
-"Hydrophobic" => $hydrophobic, "hydrogen1" => $hydrogenbd, "hydrogen2" => $hydrogenba);
-#* by Weight and combined score
+#* by Weight and calculate combined score
 foreach my $key ( keys %score )
 {
    $score{$key} *= $Weight{$key};
-   $all += $score{$key};
+   $score{'Combined'} += $score{$key};
 }
-#print STDERR "Combined: ", $all, "\n";
-$score{'Combined'} = $all;
 return %score;
 }
 
