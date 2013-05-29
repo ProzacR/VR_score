@@ -20,6 +20,7 @@ use move;
           'Hydrogen1' => 3.6,
           'Hydrogen2' => 1.8,
           'Gap' => 1.8e-2,
+          'Clash' => 1,
           'Charge' => 99, #negative means good
           'Combined' => 1
            );
@@ -112,6 +113,7 @@ my $all = 1.1;
           'Hydrogen2' => 0,
           'Gauss1' => 0,
           'Charge' => 0,
+          'Clash' => 0,
           'Combined' => 1 #initial value
            );
 
@@ -138,6 +140,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
+     $score{'Clash'}++ if ($d[$x][$y] < -2);
      #$repulsion += $d[$x][$y]**6;
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
