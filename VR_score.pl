@@ -177,13 +177,13 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
   while($d[$x][$y]) {
-   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((0.25 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
       #$score{'Hydrophobic'}++;
       #$score{'Hydrophobic1'}++ if (abs($d[$x][$y]) < 0.25);
       #$score{'Hydrophobic2'}++ if ($d[$x][$y] < -0.25);
-      $score{'Hydrophobic3'}++ if ($d[$x][$y] > 0.25);
+      $score{'Hydrophobic3'}++;
    }
    }
    $y++;
@@ -200,11 +200,11 @@ while($d[$x]) {
  $y = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
-   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < -0.25)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
       #$score{'Hydrogen1'}++ if ($d[$x][$y] < 0);
       #$score{'Hydrogen11'}++ if (abs($d[$x][$y]) < 0.25);
-      $score{'Hydrogen12'}++ if ($d[$x][$y] < -0.25);
+      $score{'Hydrogen12'}++;
       #$score{'Hydrogen13'}++ if ($d[$x][$y] > 0.25);
    }
    }
@@ -222,9 +222,9 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
   while($d[$x][$y]) {
-   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 0)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-     $score{'Hydrogen2'}++ if ($d[$x][$y] < 0);
+     $score{'Hydrogen2'}++;
      #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
      $score{'Hydrogen22'}++ if ($d[$x][$y] < -0.25);
      #$score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
@@ -240,8 +240,10 @@ $x++;
 #* by Weight and calculate combined score
 foreach my $key ( keys %score )
 {
-   $score{$key} *= $Weight{$key};
-   $score{'Combined'} += $score{$key};
+   if ($key ne 'Combined') {
+    $score{$key} *= $Weight{$key};
+    $score{'Combined'} += $score{$key};
+   }
 }
 return %score;
 }
