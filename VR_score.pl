@@ -20,7 +20,7 @@ use move;
           #'Hydrophobic1' => 1,
           #'Hydrophobic2' => 1,
           'Hydrophobic3' => 5.1e-2,
-          'Hydrogen1' => 3.6,
+          #'Hydrogen1' => 3.6,
           #'Hydrogen11' => 1,
           'Hydrogen12' => 5.1,
           #'Hydrogen13' => 1,
@@ -121,7 +121,7 @@ my $all = 1.1;
           #'Hydrophobic1' => 0,
           #'Hydrophobic2' => 0,
           'Hydrophobic3' => 0,
-          'Hydrogen1' => 0,
+          #'Hydrogen1' => 0,
           #'Hydrogen11' => 0,
           'Hydrogen12' => 0,
           #'Hydrogen13' => 0,
@@ -184,9 +184,6 @@ while($d[$x]) {
       #$score{'Hydrophobic1'}++ if (abs($d[$x][$y]) < 0.25);
       #$score{'Hydrophobic2'}++ if ($d[$x][$y] < -0.25);
       $score{'Hydrophobic3'}++ if ($d[$x][$y] > 0.25);
-    # } else {
-    #  $hydrophobic += -$d[$x][$y] + 1.5; #so linearly interpolated
-    # }
    }
    }
    $y++;
@@ -205,7 +202,7 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
-      $score{'Hydrogen1'}++ if ($d[$x][$y] < 0);
+      #$score{'Hydrogen1'}++ if ($d[$x][$y] < 0);
       #$score{'Hydrogen11'}++ if (abs($d[$x][$y]) < 0.25);
       $score{'Hydrogen12'}++ if ($d[$x][$y] < -0.25);
       #$score{'Hydrogen13'}++ if ($d[$x][$y] > 0.25);
