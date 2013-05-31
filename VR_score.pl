@@ -158,7 +158,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
-     $score{'Clash'}++ if ($d[$x][$y] < -1.5);
+     $score{'Clash'}++ if ($d[$x][$y] < -1.65);
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
   }
@@ -280,7 +280,7 @@ foreach my $line (@ligand_foot) {
 }
 
 #ligand file name
-$name = ">out_$toppoints{'Combined'}_$ligand";
+$name = ">out_$points{'Combined'}_$ligand";
 
 
 #print them
