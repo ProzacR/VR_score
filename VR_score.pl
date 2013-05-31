@@ -14,12 +14,12 @@ use move;
 #Scoring weights:
 %Weight  = (
           #'Contact' => -1.7e-1,
-          'Repulsion' => -2.7e-1,
-          'Gauss1' => -5.9e-2,
+          'Repulsion' => -2e-1,
+          'Gauss1' => -4.4e-2,
           #'Hydrophobic' => 4.3e-2,
           #'Hydrophobic1' => 1,
           #'Hydrophobic2' => 1,
-          'Hydrophobic3' => 5.1e-2,
+          'Hydrophobic3' => 5.5e-2,
           #'Hydrogen1' => 3.6,
           #'Hydrogen11' => 1,
           'Hydrogen12' => 5.1,
@@ -30,7 +30,7 @@ use move;
           #'Hydrogen23' => 1,
           #'Gap' => 1.8e-2,
           'Clash' => 1,
-          'Charge' => 1.2e+2, #negative means good
+          'Charge' => 1.1e+2, #negative means good
           'Combined' => 1
            );
 
@@ -132,7 +132,7 @@ my $all = 1.1;
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
-          'Combined' => 1.5 #initial value
+          'Combined' => 3.2 #initial value
            );
 
 
