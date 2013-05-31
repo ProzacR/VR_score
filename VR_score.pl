@@ -112,7 +112,7 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 #scoring function
 sub score {
 #initial score
-my $all = 1.1;
+my @d = ();
 %score  = (
           #'Contact' => 0,
           'Repulsion' => 0,
