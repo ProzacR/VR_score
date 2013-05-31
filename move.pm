@@ -19,7 +19,7 @@ if(int(rand(2))) { #so 50/50 chance
 if(int(rand(2))) { #so 50/50 chance rotate or move
  @ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
 } else {
- @ligand_atom_matrix = move::rotate_ligand(\@_, $move[0]);
+# @ligand_atom_matrix = move::rotate_ligand(\@_, $move[0]);
 }
 
 return @ligand_atom_matrix;

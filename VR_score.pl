@@ -80,7 +80,7 @@ while (($key, $value) = each %points)
   print "$key", " ", $value, "\n";
 }
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
-if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Repulsion'} < 1)) {
+if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Clash'} < 1) && ($points{'Repulsion'} > -30)) {
  print STDERR "\n writing ligand...\n";
  write_ligand();
  %toppoints = %points;
@@ -158,7 +158,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
-     $score{'Clash'}++ if ($d[$x][$y] < -2);
+     $score{'Clash'}++ if ($d[$x][$y] < -1.5);
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
   }
