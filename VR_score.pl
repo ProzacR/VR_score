@@ -15,7 +15,7 @@ use move;
 %Weight  = (
           #'Contact' => -1.7e-1,
           'Repulsion' => -2.7e-1,
-          #'Gauss1' => -5.9e-2,
+          'Gauss1' => -5.9e-2,
           #'Hydrophobic' => 4.3e-2,
           #'Hydrophobic1' => 1,
           #'Hydrophobic2' => 1,
@@ -24,9 +24,9 @@ use move;
           #'Hydrogen11' => 1,
           'Hydrogen12' => 5.1,
           #'Hydrogen13' => 1,
-          'Hydrogen2' => 1.2,
+          'Hydrogen2' => 1.3,
           #'Hydrogen21' => 1,
-          'Hydrogen22' => 1.8,
+          #'Hydrogen22' => 1.8,
           #'Hydrogen23' => 1,
           #'Gap' => 1.8e-2,
           'Clash' => 1,
@@ -127,9 +127,9 @@ my $all = 1.1;
           #'Hydrogen13' => 0,
           'Hydrogen2' => 0,
           #'Hydrogen21' => 0,
-          'Hydrogen22' => 0,
+          #'Hydrogen22' => 0,
           #'Hydrogen23' => 0,
-          #'Gauss1' => 0,
+          'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
           'Combined' => 1.5 #initial value
@@ -152,7 +152,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
-   #$score{'Gauss1'} += exp(-8*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
+   $score{'Gauss1'} += exp(-4*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
    #$score{'Gap'}++ if ($d[$x][$y] > 0); # count just gap
    #$score{'Contact'}++ if (abs($d[$x][$y]) < 0.25);
     if ($d[$x][$y] < 0) {
@@ -226,7 +226,7 @@ while($d[$x]) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
      $score{'Hydrogen2'}++;
      #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
-     $score{'Hydrogen22'}++ if ($d[$x][$y] < -0.25);
+     $score{'Hydrogen2'}++ if ($d[$x][$y] < -0.25); #so +2 then
      #$score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
    }
    }
