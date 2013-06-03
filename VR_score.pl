@@ -33,6 +33,8 @@ use move;
           'Charge' => 1.1e+2, #negative means good
           'Combined' => 1
            );
+#minimum alowed atom distance (overlaping if -)
+$colision = -1.28;
 
 
 #take file names
@@ -159,7 +161,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
-     if ($d[$x][$y] < -1.28) {
+     if ($d[$x][$y] < $colision) {
           $score{'Clash'}++;
           #print STDERR "colision detected! $d[$x][$y]\n";
      }
@@ -205,7 +207,7 @@ while($d[$x]) {
  $y = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
-   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < -0.25)) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < -0.25)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
       #$score{'Hydrogen1'}++ if ($d[$x][$y] < 0);
       #$score{'Hydrogen11'}++ if (abs($d[$x][$y]) < 0.25);
@@ -227,7 +229,7 @@ while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
   while($d[$x][$y]) {
-   if ((-2 < $d[$x][$y]) && ($d[$x][$y] < 0)) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 0)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
      $score{'Hydrogen2'}++;
      #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
