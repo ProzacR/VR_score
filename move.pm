@@ -16,11 +16,11 @@ if(int(rand(2))) { #so 50/50 chance
  $move[1] = -1;
 }
 #print STDERR Dumper \@move;
-if(int(rand(2))) { #so 50/50 chance rotate or move
+#if(int(rand(2))) { #so 50/50 chance rotate or move
  @ligand_atom_matrix = move::move_ligand(\@_, $move[0], $move[1]);
-} else {
-# @ligand_atom_matrix = move::rotate_ligand(\@_, $move[0]);
-}
+#} else {
+ #@ligand_atom_matrix = move::rotate_ligand(\@_, $move[0]);
+#}
 
 return @ligand_atom_matrix;
 }
