@@ -81,7 +81,7 @@ while (($key, $value) = each %points)
 }
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
 if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Clash'} < 1) && ($points{'Repulsion'} > -30)) {
- print STDERR "\n writing ligand...\n";
+ print STDERR "\n writing ligand...\n\n";
  write_ligand();
  %toppoints = %points;
 }
@@ -143,6 +143,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  $y=0;
  my $lig_radius = get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'radius');
  die("$ligand_atom[$x]{'atom_type'}[0] radius undefined!") if (!($lig_radius));
+ die ("ligand_atom_matrix element $x undefined!") if !($ligand_atom_matrix[$x]);
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
  if ($d[$x][$y] < 100) { #skip very distant atom pairs
@@ -158,7 +159,10 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
      $score{'Repulsion'}++;
-     $score{'Clash'}++ if ($d[$x][$y] < -1.65);
+     if ($d[$x][$y] < -1.28) {
+          $score{'Clash'}++;
+          #print STDERR "colision detected! $d[$x][$y]\n";
+     }
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
     }
   }
@@ -168,6 +172,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
 $x++;
 }
 #print STDERR "d size ", $x, " ", $y, "\n";
+#print STDERR "x: ", $ligand_atom[2]{'atom_type'}[0], " y: ", $protein_atom[3147]{'atom_type'}[0], " d:", $d[2][3147], "\n";
 
 
 #calculate hydrophobic
