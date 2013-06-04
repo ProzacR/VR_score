@@ -14,23 +14,23 @@ use move;
 #Scoring weights:
 %Weight  = (
           #'Contact' => -1.7e-1,
-          'Repulsion' => -2e-1,
-          'Gauss1' => -4.4e-2,
+          'Repulsion' => -1.5e-1,
+          'Gauss1' => -6.3e-2,
           #'Hydrophobic' => 4.3e-2,
           #'Hydrophobic1' => 1,
           #'Hydrophobic2' => 1,
           'Hydrophobic3' => 5.5e-2,
           #'Hydrogen1' => 3.6,
           #'Hydrogen11' => 1,
-          'Hydrogen12' => 5.1,
+          'Hydrogen12' => 1.3,
           #'Hydrogen13' => 1,
           'Hydrogen2' => 1.3,
           #'Hydrogen21' => 1,
           #'Hydrogen22' => 1.8,
-          'Hydrogen3' => 1,
+          'Hydrogen3' => 2.6e-1,
           #'Gap' => 1.8e-2,
           'Clash' => 1,
-          'Charge' => 1.1e+2, #negative means good
+          'Charge' => 9.8e+1, #negative means good
           'Combined' => 1
            );
 #minimum alowed atom distance (overlaping if -)
@@ -134,7 +134,7 @@ my @d = ();
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
-          'Combined' => 3.2 #initial value
+          'Combined' => 1.8 #initial value
            );
 
 
