@@ -27,7 +27,7 @@ use move;
           'Hydrogen2' => 1.3,
           #'Hydrogen21' => 1,
           #'Hydrogen22' => 1.8,
-          #'Hydrogen23' => 1,
+          'Hydrogen3' => 1,
           #'Gap' => 1.8e-2,
           'Clash' => 1,
           'Charge' => 1.1e+2, #negative means good
@@ -130,7 +130,7 @@ my @d = ();
           'Hydrogen2' => 0,
           #'Hydrogen21' => 0,
           #'Hydrogen22' => 0,
-          #'Hydrogen23' => 0,
+          'Hydrogen3' => 0,
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
@@ -179,7 +179,6 @@ $x++;
 
 #calculate hydrophobic
 $x = 0;
-my $hydrophobic = 0;
 while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
@@ -202,7 +201,6 @@ $x++;
 
 #ligand as hydrogen bond donor
 $x = 0;
-my $hydrogenbd = 0;
 while($d[$x]) {
  $y = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
@@ -224,7 +222,6 @@ $x++;
 
 #ligand as hydrogen bond acceptor
 $x = 0;
-my $hydrogenba = 0;
 while($d[$x]) {
  $y = 0;
  if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
@@ -234,6 +231,27 @@ while($d[$x]) {
      $score{'Hydrogen2'}++;
      #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
      $score{'Hydrogen2'}++ if ($d[$x][$y] < -0.25); #so +2 then
+     #$score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#non polar H
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if ((abs($ligand_atom[$x]{'charge'}) < 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((abs($protein_atom[$y]{'charge'}) < 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
+     $score{'Hydrogen3'}++;
+     #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
+     #$score{'Hydrogen3'}++ if ($d[$x][$y] < -0.25); #so +2 then
      #$score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
    }
    }
