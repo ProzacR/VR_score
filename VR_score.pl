@@ -62,7 +62,7 @@ print STDERR "reading ligand...\n";
 @ligand_atom_matrix = @$atom_matrix;
 @ligand_foot = @$foot;
 #that case probably mol2 files mixed places:
-die("Ligand has 200+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 200);
+die("Ligand has 300+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@ligand_atom > 300);
 #print STDERR Dumper \@ligand_head, \@ligand_foot;
 
 
