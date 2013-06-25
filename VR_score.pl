@@ -148,7 +148,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
  die ("ligand_atom_matrix element $x undefined!") if !($ligand_atom_matrix[$x]);
  while($protein_atom[$y]) {
  $d[$x][$y] = distance_sqared($ligand_atom_matrix[$x],$protein_atom_matrix[$y]);
- if ($d[$x][$y] < 100) { #skip very distant atom pairs
+ if (($d[$x][$y] < 100) && ($ligand_atom[$x]{'atom_type'}[0] eq 'F')) { #skip very distant atom pairs and non F
   $score{'Charge'} += $ligand_atom[$x]{'charge'}*$protein_atom[$y]{'charge'}/$d[$x][$y];
   $d[$x][$y] = sqrt($d[$x][$y]) 
   - $lig_radius
@@ -181,7 +181,9 @@ $x++;
 $x = 0;
 while($d[$x]) {
  $y = 0;
- if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
+ #if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic')) {
+ #F only:
+ if ($ligand_atom[$x]{'atom_type'}[0] eq 'F') {
   while($d[$x][$y]) {
    if ((0.25 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
@@ -224,7 +226,9 @@ $x++;
 $x = 0;
 while($d[$x]) {
  $y = 0;
- if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
+ #if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
+ #F only:
+ if ($ligand_atom[$x]{'atom_type'}[0] eq 'F') {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 0)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
