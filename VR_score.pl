@@ -13,12 +13,13 @@ use move;
 
 #Scoring weights:
 %Weight  = (
+          'FO' => 1,
           #'Contact' => -1.7e-1,
           'Repulsion' => -1.5e-1,
           'Gauss1' => -6.3e-2,
           #'Hydrophobic' => 4.3e-2,
-          #'Hydrophobic1' => 1,
-          #'Hydrophobic2' => 1,
+          'Hydrophobic1' => 1,
+          'Hydrophobic2' => 1,
           'Hydrophobic3' => 5.5e-2,
           #'Hydrogen1' => 3.6,
           #'Hydrogen11' => 1,
@@ -119,12 +120,13 @@ sub score {
 #initial score
 my @d = ();
 %score  = (
+          'FO' => 0,
           #'Contact' => 0,
           'Repulsion' => 0,
           #'Gap' => 0,
           #'Hydrophobic' => 0,
-          #'Hydrophobic1' => 0,
-          #'Hydrophobic2' => 0,
+          'Hydrophobic1' => 0,
+          'Hydrophobic2' => 0,
           'Hydrophobic3' => 0,
           #'Hydrogen1' => 0,
           #'Hydrogen11' => 0,
@@ -188,12 +190,12 @@ while($d[$x]) {
  #F only:
  if ($ligand_atom[$x]{'atom_id'} == $Fnr) {
   while($d[$x][$y]) {
-   if ((0.25 < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
       #$score{'Hydrophobic'}++;
-      #$score{'Hydrophobic1'}++ if (abs($d[$x][$y]) < 0.25);
-      #$score{'Hydrophobic2'}++ if ($d[$x][$y] < -0.25);
+      $score{'Hydrophobic1'}++ if (abs($d[$x][$y]) < 0.25);
+      $score{'Hydrophobic2'}++ if ($d[$x][$y] < -0.25);
       $score{'Hydrophobic3'}++;
    }
    }
@@ -247,6 +249,27 @@ while($d[$x]) {
 $x++;
 }
 
+
+#F->O
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ #if (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'H_acceptor')) {
+ #F only:
+ if ($ligand_atom[$x]{'atom_id'} == $Fnr) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 0.4)) {
+   if (($protein_atom[$y]{'atom_type'}[0] eq 'O') && ($protein_atom[$y]{'atom_type'}[1] == 3)) {
+     $score{'FO'}++;
+     #$score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
+     #$score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
 
 ##non polar H
 #$x = 0;
