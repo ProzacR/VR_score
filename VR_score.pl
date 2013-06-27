@@ -31,6 +31,7 @@ use move;
           #'Gap' => 1.8e-2,
           'Clash' => 1,
           'Charge' => 9.8e+1, #negative means good
+          'MWs' => 1,
           'Combined' => 1
            );
 #minimum alowed atom distance (overlaping if -)
@@ -134,6 +135,7 @@ my @d = ();
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
+          'MWs' => 0,
           'Combined' => 1.8 #initial value
            );
 
@@ -259,6 +261,14 @@ while($d[$x]) {
   }
  }
 $x++;
+}
+
+
+#MW of ligand
+$x = 0;
+while ($ligand_atom[$x]{'atom_type'}[0]) {
+  $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
+  $x++;
 }
 
 
