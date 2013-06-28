@@ -1,0 +1,8 @@
+order to do everything from very start is:
+1) pdb id list text files
+2) create_set.sh
+3) prepare_set.sh
+Now set is ready. Still Kd values are bit mess.
+4) fix Kd values with office in csv file manually
+5) main_train.sh
+It makes final picture
