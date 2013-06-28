@@ -12,7 +12,7 @@ cat("-- reading arguments\n", sep = "");
 cmd_args = commandArgs();
 #for (arg in cmd_args) cat("  ", arg, "\n", sep="");
 cmd_args[4]
-data<-as.matrix(read.table(cmd_args[4], sep=','))
+data<-as.matrix(read.table(cmd_args[4], sep=',', header=TRUE))
 stulp=ncol(data)
 data[1,]
 stulp
