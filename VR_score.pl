@@ -76,8 +76,16 @@ die("Ligand has 300+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 %toppoints = score();
 while (($key, $value) = each %toppoints)
 {
-  print "$key", " ", $value, " ";
+  print "$key", ",";
 }
+print "\n";
+while (($key, $value) = each %toppoints)
+{
+  print $value, ",";
+}
+#print "\n";
+
+
 $main = 0;
 #move away check score
 while ($main < $move[2]) {
@@ -85,7 +93,11 @@ while ($main < $move[2]) {
 %points = score();
 while (($key, $value) = each %points)
 {
-  print "$key", " ", $value, "\n";
+  print "$key", " ", "\n";
+}
+while (($key, $value) = each %points)
+{
+  print $value, "\n";
 }
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
 if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Clash'} < 1) && ($points{'Repulsion'} > -30)) {
