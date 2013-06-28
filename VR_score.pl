@@ -4,36 +4,41 @@
 #
 # VR
 
+
 use warnings;
 #use Data::Dumper;
+
 
 use read_mol2;
 use get_atom_parameter;
 use move;
 
-#Scoring weights:
-%Weight  = (
-          #'Contact' => -1.7e-1,
-          'Repulsion' => -1.5e-1,
-          'Gauss1' => -6.3e-2,
-          #'Hydrophobic' => 4.3e-2,
-          #'Hydrophobic1' => 1,
-          #'Hydrophobic2' => 1,
-          'Hydrophobic3' => 5.5e-2,
-          #'Hydrogen1' => 3.6,
-          #'Hydrogen11' => 1,
-          'Hydrogen12' => 1.3,
-          #'Hydrogen13' => 1,
-          'Hydrogen2' => 1.3,
-          #'Hydrogen21' => 1,
-          #'Hydrogen22' => 1.8,
-          'Hydrogen3' => 2.6e-1,
-          #'Gap' => 1.8e-2,
-          'Clash' => 1,
-          'Charge' => 9.8e+1, #negative means good
-          'MWs' => 1,
-          'Combined' => 1
-           );
+
+##Scoring weights:
+#%Weight  = (
+#          #'Contact' => -1.7e-1,
+#          'Repulsion' => -1.5e-1,
+#          'Gauss1' => -6.3e-2,
+#          #'Hydrophobic' => 4.3e-2,
+#          #'Hydrophobic1' => 1,
+#          #'Hydrophobic2' => 1,
+#          'Hydrophobic3' => 5.5e-2,
+#          #'Hydrogen1' => 3.6,
+#          #'Hydrogen11' => 1,
+#          'Hydrogen12' => 1.3,
+#          #'Hydrogen13' => 1,
+#          'Hydrogen2' => 1.3,
+#          #'Hydrogen21' => 1,
+#          #'Hydrogen22' => 1.8,
+#          'Hydrogen3' => 2.6e-1,
+#          #'Gap' => 1.8e-2,
+#          'Clash' => 1,
+#          'Charge' => 9.8e+1, #negative means good
+#          'MWs' => 1,
+#          #'Combined' => 1
+#           );
+
+
 #minimum alowed atom distance (overlaping if -)
 $colision = -1.28;
 
@@ -136,7 +141,7 @@ my @d = ();
           'Charge' => 0,
           'Clash' => 0,
           'MWs' => 0,
-          'Combined' => 1.8 #initial value
+          #'Combined' => 1.8 #initial value
            );
 
 
@@ -272,14 +277,16 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
 }
 
 
-#* by Weight and calculate combined score
-foreach my $key ( keys %score )
-{
-   if ($key ne 'Combined') {
-    $score{$key} *= $Weight{$key};
-    $score{'Combined'} += $score{$key};
-   }
-}
+##* by Weight and calculate combined score
+#foreach my $key ( keys %score )
+#{
+#   if ($key ne 'Combined') {
+#    $score{$key} *= $Weight{$key};
+#    $score{'Combined'} += $score{$key};
+#   }
+#}
+
+
 return %score;
 }
 
