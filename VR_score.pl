@@ -137,22 +137,30 @@ my @d = ();
           'Contact' => 0,
           'Repulsion' => 0,
           'Gap' => 0,
-          'Hydrophobic' => 0,
           'Hydrophobic1' => 0,
           'Hydrophobic2' => 0,
           'Hydrophobic3' => 0,
-          'Hydrogen1' => 0,
+          'Hydrophobic4' => 0,
+          'Hydrophobic5' => 0,
+          'Hydrophobic6' => 0,
           'Hydrogen11' => 0,
           'Hydrogen12' => 0,
-          'Hydrogen13' => 0,
-          'Hydrogen2' => 0,
+          #'Hydrogen13' => 0,
+          'Hydrogen14' => 0,
+          'Hydrogen15' => 0,
+          #'Hydrogen16' => 0,
           'Hydrogen21' => 0,
           'Hydrogen22' => 0,
           'Hydrogen23' => 0,
-          'Hydrogen3' => 0,
+          'Hydrogen24' => 0,
+          'Hydrogen25' => 0,
+          'Hydrogen26' => 0,
           'Hydrogen31' => 0,
           'Hydrogen32' => 0,
           'Hydrogen33' => 0,
+          'Hydrogen34' => 0,
+          'Hydrogen35' => 0,
+          'Hydrogen36' => 0,
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
@@ -209,10 +217,12 @@ while($d[$x]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic')) {
     #if ($d[$x][$y] < 0.5) {
-      $score{'Hydrophobic'}++ if ($d[$x][$y] < 0.25);
-      $score{'Hydrophobic1'}++ if (abs($d[$x][$y]) < 0.25);
-      $score{'Hydrophobic2'}++ if ($d[$x][$y] < -0.25);
-      $score{'Hydrophobic3'}++;
+      $score{'Hydrophobic1'}++;
+      $score{'Hydrophobic2'}++ if ($d[$x][$y] < 0.25);
+      $score{'Hydrophobic3'}++ if (abs($d[$x][$y]) < 0.25);
+      $score{'Hydrophobic4'}++ if ($d[$x][$y] < -0.25);
+      $score{'Hydrophobic5'}++ if ($d[$x][$y] < 0);
+      $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
@@ -230,10 +240,12 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < -0.25)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
-      $score{'Hydrogen1'}++ if ($d[$x][$y] < 0);
-      $score{'Hydrogen11'}++ if (abs($d[$x][$y]) < 0.25);
-      $score{'Hydrogen12'}++;
-      $score{'Hydrogen13'}++ if ($d[$x][$y] > 0.25);
+      $score{'Hydrogen11'}++;
+      $score{'Hydrogen12'}++ if ($d[$x][$y] < 0.25);
+      #$score{'Hydrogen13'}++ if (abs($d[$x][$y]) < 0.25);
+      $score{'Hydrogen14'}++ if ($d[$x][$y] < -0.25);
+      $score{'Hydrogen15'}++ if ($d[$x][$y] < 0);
+      #$score{'Hydrogen16'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
@@ -251,10 +263,12 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 0)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-     $score{'Hydrogen2'}++;
-     $score{'Hydrogen21'}++ if (abs($d[$x][$y]) < 0.25);
-     $score{'Hydrogen22'}++ if ($d[$x][$y] < -0.25); #so +2 then
-     $score{'Hydrogen23'}++ if ($d[$x][$y] > 0.25);
+     $score{'Hydrogen21'}++;
+     $score{'Hydrogen22'}++ if ($d[$x][$y] < 0.25);
+     $score{'Hydrogen23'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'Hydrogen24'}++ if ($d[$x][$y] < -0.25);
+     $score{'Hydrogen25'}++ if ($d[$x][$y] < 0);
+     $score{'Hydrogen26'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
@@ -272,10 +286,12 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if ((abs($protein_atom[$y]{'charge'}) < 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-     $score{'Hydrogen3'}++;
-     $score{'Hydrogen31'}++ if (abs($d[$x][$y]) < 0.25);
-     $score{'Hydrogen32'}++ if ($d[$x][$y] < -0.25); #so +2 then
-     $score{'Hydrogen33'}++ if ($d[$x][$y] > 0.25);
+     $score{'Hydrogen31'}++;
+     $score{'Hydrogen32'}++ if ($d[$x][$y] < 0.25);
+     $score{'Hydrogen33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'Hydrogen34'}++ if ($d[$x][$y] < -0.25);
+     $score{'Hydrogen35'}++ if ($d[$x][$y] < 0);
+     $score{'Hydrogen36'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
