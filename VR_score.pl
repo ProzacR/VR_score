@@ -12,6 +12,7 @@ use warnings;
 use read_mol2;
 use get_atom_parameter;
 use move;
+use sasa;
 
 
 ##Scoring weights:
@@ -366,6 +367,15 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
   $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
   $x++;
 }
+
+
+#dSASA
+$x = 0;
+while ($ligand_atom[$x]{'atom_type'}[0]) {
+  push @ligand_atom_type, $ligand_atom[$x]{'atom_type'}[0];
+  $x++;
+}
+$dSASA = sasa::sasa(\@ligand_atom_matrix, \@ligand_atom_type);
 
 
 ##* by Weight and calculate combined score
