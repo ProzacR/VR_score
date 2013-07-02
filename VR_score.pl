@@ -130,6 +130,7 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 
 #scoring function
+#TODO SASA together - SASA ligand - SASA protein
 sub score {
 #initial score
 my @d = ();
@@ -161,6 +162,18 @@ my @d = ();
           'Hydrogen34' => 0,
           'Hydrogen35' => 0,
           'Hydrogen36' => 0,
+          'HH_31' => 0,
+          'HH_32' => 0,
+          'HH_33' => 0,
+          'HH_34' => 0,
+          'HH_35' => 0,
+          'HH_36' => 0,
+          'HH2_31' => 0,
+          'HH2_32' => 0,
+          'HH2_33' => 0,
+          'HH2_34' => 0,
+          'HH2_35' => 0,
+          'HH2_36' => 0,
           'Gauss1' => 0,
           'Charge' => 0,
           'Clash' => 0,
@@ -292,6 +305,52 @@ while($d[$x]) {
      $score{'Hydrogen34'}++ if ($d[$x][$y] < -0.25);
      $score{'Hydrogen35'}++ if ($d[$x][$y] < 0);
      $score{'Hydrogen36'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#hydrophobic - hydrophilic
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if ((abs($ligand_atom[$x]{'charge'}) < 0.1) || (get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic'))) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((abs($protein_atom[$y]{'charge'}) > 0.1) || !(get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic'))) {
+     $score{'HH_31'}++;
+     $score{'HH_32'}++ if ($d[$x][$y] < 0.25);
+     $score{'HH_33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'HH_34'}++ if ($d[$x][$y] < -0.25);
+     $score{'HH_35'}++ if ($d[$x][$y] < 0);
+     $score{'HH_36'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#hydrophilic - hydrophobic
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if ((abs($ligand_atom[$x]{'charge'}) > 0.1) || !(get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic'))) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((abs($protein_atom[$y]{'charge'}) < 0.1) || (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic'))) {
+     $score{'HH2_31'}++;
+     $score{'HH2_32'}++ if ($d[$x][$y] < 0.25);
+     $score{'HH2_33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'HH2_34'}++ if ($d[$x][$y] < -0.25);
+     $score{'HH2_35'}++ if ($d[$x][$y] < 0);
+     $score{'HH2_36'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
