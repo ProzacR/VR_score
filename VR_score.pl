@@ -131,7 +131,6 @@ return $dxs*$dxs+$dys*$dys+$dzs*$dzs;
 
 
 #scoring function
-#TODO SASA together - SASA ligand - SASA protein
 sub score {
 #initial score
 my @d = ();
@@ -179,6 +178,7 @@ my @d = ();
           'Charge' => 0,
           'Clash' => 0,
           'MWs' => 0,
+          'dSASA' => 0,
           #'Combined' => 1.8 #initial value
            );
 
@@ -369,13 +369,18 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
 }
 
 
-#dSASA
+#dSASA FIXME
 $x = 0;
 while ($ligand_atom[$x]{'atom_type'}[0]) {
   push @ligand_atom_type, $ligand_atom[$x]{'atom_type'}[0];
   $x++;
 }
-$dSASA = sasa::sasa(\@ligand_atom_matrix, \@ligand_atom_type);
+$x = 0;
+#while ($protein_atom[$x]{'atom_type'}[0]) {
+#  push @protein_atom_type, $protein_atom[$x]{'atom_type'}[0];
+#  $x++;
+#}
+$score{'dSASA'} = sasa::sasa(\@ligand_atom_matrix, \@ligand_atom_type); #VERY slow:- sasa::sasa(\@protein_atom_matrix, \@protein_atom_type);
 
 
 ##* by Weight and calculate combined score

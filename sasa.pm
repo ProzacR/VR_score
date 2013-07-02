@@ -7,7 +7,7 @@ package sasa;
 # VR 2013
 
 use Math::Trig;
-#use Data::Dumper;
+use Data::Dumper;
 use warnings;
 
 
@@ -22,9 +22,9 @@ use get_atom_parameter;
 
 
 #H2O radius:
-$prad=1.4;
+$prad = 1.4;
 #tasku sk. aplink atomus (daugiau tiksliau: ~simtai):
-$M=500;
+$M = 100;
 
 sub sasa {
 $E = 0;
@@ -112,9 +112,9 @@ $k = 0;
 
 #solvation energy:
 $x=0;
-while (@sasa >= $x) {
-$E=$E+$sasa[$x]*$N[$x][4];
-$x++;
+while (@sasa > $x) {
+ $E = $E + $sasa[$x] * $N[$x][4];
+ $x++;
 }
 #print STDERR "x: ", $x, "\n";
 #print STDERR "solvation energy: ", $E/1000, " kcal/mol\n";
