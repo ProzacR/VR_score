@@ -178,7 +178,9 @@ my @d = ();
           'Charge' => 0,
           'Clash' => 0,
           'MWs' => 0,
-          'dSASA' => 0,
+          #'SASA1' => 0,
+          #'SASA2' => 0,
+          #'SASA3' => 0,
           #'Combined' => 1.8 #initial value
            );
 
@@ -369,18 +371,32 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
 }
 
 
-#dSASA FIXME
-$x = 0;
-while ($ligand_atom[$x]{'atom_type'}[0]) {
-  push @ligand_atom_type, $ligand_atom[$x]{'atom_type'}[0];
-  $x++;
-}
-$x = 0;
-#while ($protein_atom[$x]{'atom_type'}[0]) {
-#  push @protein_atom_type, $protein_atom[$x]{'atom_type'}[0];
+##dSASA
+#$x = 0;
+#while ($ligand_atom[$x]{'atom_type'}[0]) {
+#  push @ligand_atom_type, $ligand_atom[$x]{'atom_type'}[0];
 #  $x++;
 #}
-$score{'dSASA'} = sasa::sasa(\@ligand_atom_matrix, \@ligand_atom_type); #VERY slow:- sasa::sasa(\@protein_atom_matrix, \@protein_atom_type);
+#$x = 0;
+#$maxd = 6;
+##supaprastinimas: surinkti tik tuos balt atom kurie arti ligando
+#while ($protein_atom[$x]{'atom_type'}[0]) {
+#  $y = 0;
+#    while ($ligand_atom[$y]{'atom_type'}[0]) {
+#      if ($d[$y][$x] < $maxd) {
+#        push (@protein_atom_type, $protein_atom[$x]{'atom_type'}[0]);
+#        last;
+#      } 
+#      $y++;
+#      push (@protein_atom_type, 0); #signal to skip it
+#    }
+#  $x++;
+#}
+#@atom_matrix = (@ligand_atom_matrix, @protein_atom_matrix);
+#@atom_type = (@ligand_atom_type, @protein_atom_type);
+#$score{'SASA1'} = sasa::sasa(\@atom_matrix, \@atom_type) -  sasa::sasa(\@ligand_atom_matrix, \@ligand_atom_type)
+#- sasa::sasa(\@protein_atom_matrix, \@protein_atom_type);
+##VERY slow:- sasa::sasa(\@protein_atom_matrix, \@protein_atom_type);
 
 
 ##* by Weight and calculate combined score

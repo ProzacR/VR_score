@@ -40,7 +40,7 @@ while ($$atom_type[$x]) {
   #$N[$x] = [x, y, z, radii, solv_par];
   $N[$x] = [$$atom_matrix[$x][0], $$atom_matrix[$x][1], $$atom_matrix[$x][2],
   get_atom_parameter::get_atom_parameter($$atom_type[$x], 'radius'),
-  get_atom_parameter::get_atom_parameter($$atom_type[$x], 'solvation_parameter')];
+  get_atom_parameter::get_atom_parameter($$atom_type[$x], 'solvation_parameter')] if ($$atom_type[$x]);
   $x++;
 }
 #print STDERR Dumper \@N;
