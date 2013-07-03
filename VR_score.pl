@@ -174,10 +174,19 @@ my @d = ();
           'HH2_34' => 0,
           'HH2_35' => 0,
           'HH2_36' => 0,
+          'lHH2_31' => 0,
+          'lHH2_32' => 0,
+          'lHH2_33' => 0,
+          'lHH2_34' => 0,
+          'lHH2_35' => 0,
+          'lHH2_36' => 0,
           'Gauss1' => 0,
+          'Gauss2' => 0,
+          'Gauss3' => 0,
           'Charge' => 0,
           'Clash' => 0,
           'MWs' => 0,
+          'noContact' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -202,7 +211,9 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
-   $score{'Gauss1'} += exp(-4*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
+   $score{'Gauss1'} += exp(-2*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
+   $score{'Gauss2'} += exp(-4*($d[$x][$y]**2));
+   $score{'Gauss3'} += exp(-8*($d[$x][$y]**2));
    $score{'Gap'}++ if ($d[$x][$y] > 0); # count just gap
    $score{'Contact'}++ if (abs($d[$x][$y]) < 0.25);
     if ($d[$x][$y] < 0) {
@@ -359,6 +370,23 @@ while($d[$x]) {
    $y++;
   }
  }
+$x++;
+}
+
+
+#ligand atom no contact
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ $noscore = 0;
+   while($d[$x][$y]) {
+    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+     $noscore = 1;
+     last;
+    }
+  $y++;
+  }
+ $score{'noContact'}++ if ($noscore == 1);
 $x++;
 }
 
