@@ -12,7 +12,7 @@ use warnings;
 use read_mol2;
 use get_atom_parameter;
 use move;
-use sasa;
+#use sasa;
 
 
 ##Scoring weights:
@@ -56,13 +56,13 @@ die("usage: VR_score.pl protein.mol2 ligand.mol2");
 
 
 #parse files
-print STDERR "reading protein...\n";
+print STDERR "reading protein $protein ...\n";
 ($head, $atom, $atom_matrix, $foot) = read_mol2::read_mol2($protein);
 #@protein_head = @$head;
 @protein_atom = @$atom;
 @protein_atom_matrix = @$atom_matrix;
 #@protein_foot = @$foot;
-print STDERR "reading ligand...\n";
+print STDERR "reading ligand $ligand ...\n";
 ($head, $atom, $atom_matrix, $foot) = read_mol2::read_mol2($ligand);
 @ligand_head = @$head;
 @ligand_atom = @$atom;
@@ -84,7 +84,9 @@ while (($key, $value) = each %toppoints)
 {
   print $value, ",";
 }
-#print "\n";
+#print STDERR "\n";
+#print just one term for debug:
+print STDERR " lHH1: $toppoints{'lHH1'} \n";
 
 
 $main = 0;
@@ -174,19 +176,21 @@ my @d = ();
           'HH2_34' => 0,
           'HH2_35' => 0,
           'HH2_36' => 0,
-          'lHH2_31' => 0,
-          'lHH2_32' => 0,
-          'lHH2_33' => 0,
-          'lHH2_34' => 0,
-          'lHH2_35' => 0,
-          'lHH2_36' => 0,
+          'lHH1' => 0,
+          #'lHH2' => 0,
+          #'lHH2_33' => 0,
+          #'lHH2_34' => 0,
+          #'lHH2_35' => 0,
+          #'lHH2_36' => 0,
           'Gauss1' => 0,
           'Gauss2' => 0,
           'Gauss3' => 0,
           'Charge' => 0,
           'Clash' => 0,
           'MWs' => 0,
-          'noContact' => 0,
+          'noContact1' => 0,
+          'noContact2' => 0,
+          'noContact3' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -263,10 +267,12 @@ $x++;
 $x = 0;
 while($d[$x]) {
  $y = 0;
+ $count = 0;
  if (($ligand_atom[$x]{'charge'} > 0.1) && ($ligand_atom[$x]{'atom_type'}[0] eq 'H')) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'H_acceptor')) {
+      $count++ if ($d[$x][$y] < 0.25);
       $score{'Hydrogen11'}++;
       $score{'Hydrogen12'}++ if ($d[$x][$y] < 0.25);
       $score{'Hydrogen13'}++ if (abs($d[$x][$y]) < 0.25);
@@ -278,7 +284,8 @@ while($d[$x]) {
    $y++;
   }
  }
-$x++;
+ $score{'lHH1'}++ if ($count > 1);
+ $x++;
 }
 
 
@@ -374,21 +381,26 @@ $x++;
 }
 
 
-#ligand atom no contact
-$x = 0;
-while($d[$x]) {
- $y = 0;
- $noscore = 0;
-   while($d[$x][$y]) {
-    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
-     $noscore = 1;
-     last;
-    }
-  $y++;
-  }
- $score{'noContact'}++ if ($noscore == 1);
-$x++;
-}
+##ligand atom no contact
+#$x = 0;
+#while($d[$x]) {
+# $y = 0;
+# $contact1 = 0;
+# $contact2 = 0;
+# $contact3 = 0;
+#   while($d[$x][$y]) {
+#    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 0)) {
+#     $contact1++;
+#    }
+#    $contact2++ if ($d[$x][$y] < -0.25);
+#    $contact3++ if ($d[$x][$y] < -0.5);
+#  $y++;
+#  }
+# $score{'noContact1'}++ if !($contact1);
+# $score{'noContact2'}++ if !($contact2);
+# $score{'noContact3'}++ if !($contact3);
+#$x++;
+#}
 
 
 #MW of ligand
