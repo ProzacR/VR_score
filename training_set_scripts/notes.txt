@@ -1,8 +1,11 @@
-order to do everything from very start is:
-1) pdb id list text files
+Order to do everything from very start is:
+1) pdb id list in file id_list.txt. Every id in start of new line.
+Line may have extra data after space. It will be ignored.
 2) create_set.sh
 3) prepare_set.sh
-Now set is ready. Still Kd values are bit mess.
-4) fix Kd values with office in csv file manually
+Now set is ready. Still Kd values sheet are bit mess.
+4) fix Kd values with office in file Kd_ligand_table.csv manually
+and save as Final_table3.csv. Columin 4 Kd values only as numbers.
+Also fix train.sh to reflect file locations. 
 5) main_train.sh
 It makes final picture
