@@ -191,6 +191,12 @@ my @d = ();
           'noContact1' => 0,
           'noContact2' => 0,
           'noContact3' => 0,
+          'ZH_31' => 0,
+          'ZH_32' => 0,
+          'ZH_33' => 0,
+          'ZH_34' => 0,
+          'ZH_35' => 0,
+          'ZH_36' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -372,6 +378,29 @@ while($d[$x]) {
      $score{'HH2_34'}++ if ($d[$x][$y] < -0.25);
      $score{'HH2_35'}++ if ($d[$x][$y] < 0);
      $score{'HH2_36'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#Zn
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if ((abs($ligand_atom[$x]{'charge'}) > 0.1) || !(get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'hydrophobic'))) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ($protein_atom[$y]{'atom_type'}[0] eq 'Zn') {
+     $score{'ZH_31'}++;
+     $score{'ZH_32'}++ if ($d[$x][$y] < 0.25);
+     $score{'ZH_33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'ZH_34'}++ if ($d[$x][$y] < -0.25);
+     $score{'ZH_35'}++ if ($d[$x][$y] < 0);
+     $score{'ZH_36'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
