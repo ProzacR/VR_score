@@ -188,7 +188,6 @@ my @d = ();
 #          'Charge' => 0,
 #          'Clash' => 0,
           'MWs' => 0,
-          'SS' => 0,
 #          'noContact1' => 0,
 #          'noContact2' => 0,
 #          'noContact3' => 0,
@@ -222,8 +221,8 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
   $ids{$id} = 1;
   $x++;
 }
-$score{'SS'} = keys %ids;
-$score{'MWs'} = $score{'MWs'}/$score{'SS'};
+$SS = keys %ids;
+#$score{'MWs'} = $score{'MWs'}/$SS;
 #print STDERR keys %ids;
 
 
@@ -448,7 +447,7 @@ while($d[$x]) {
 #     $score{'SO3'}++ if (abs($d[$x][$y]) < 0.25);
 #     $score{'SO4'}++ if ($d[$x][$y] < -0.25);
      $score{'SO5'}++ if ($d[$x][$y] < 0);
-#     $score{'SO6'}++ if ($d[$x][$y] < -0.1);
+#     $score{'SO6'} = $score{'SO5'}/$SS;
    }
    }
    $y++;
@@ -509,13 +508,14 @@ $x++;
 
 
 ##* by Weight and calculate combined score
-#foreach my $key ( keys %score )
-#{
-#   if ($key ne 'Combined') {
-#    $score{$key} *= $Weight{$key};
-#    $score{'Combined'} += $score{$key};
-#   }
-#}
+foreach my $key ( keys %score )
+{
+   $score{$key} = $score{$key}/$SS;
+   #if ($key ne 'Combined') {
+   # $score{$key} *= $Weight{$key};
+   # $score{'Combined'} += $score{$key};
+   #}
+}
 
 
 return %score;
