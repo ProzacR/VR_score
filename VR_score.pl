@@ -142,10 +142,12 @@ my @d = ();
 #          'Gap' => 0,
           'Hydrophobic1' => 0,
 #          'Hydrophobic2' => 0,
-          'Hydrophobic3' => 0,
-#          'Hydrophobic4' => 0,
+#          'Hydrophobic3' => 0,
+          'Hydrophobic4' => 0,
           'Hydrophobic5' => 0,
-#          'Hydrophobic6' => 0,
+          'Hydrophobic6' => 0,
+          'Hydrophobic7' => 0,
+          'Hydrophobic8' => 0,
 #          'Hydrogen11' => 0,
 #          'Hydrogen12' => 0,
 #          'Hydrogen13' => 0,
@@ -278,10 +280,12 @@ while($d[$x]) {
     #if ($d[$x][$y] < 0.5) {
       $score{'Hydrophobic1'}++;
 #      $score{'Hydrophobic2'}++ if ($d[$x][$y] < 0.25);
-      $score{'Hydrophobic3'}++ if (abs($d[$x][$y]) < 0.25);
-#      $score{'Hydrophobic4'}++ if ($d[$x][$y] < -0.25);
+#      $score{'Hydrophobic3'}++ if (abs($d[$x][$y]) < 0.25);
+      $score{'Hydrophobic4'}++ if ($d[$x][$y] < -0.25);
       $score{'Hydrophobic5'}++ if ($d[$x][$y] < 0);
-#      $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
+      $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
+      $score{'Hydrophobic7'}++ if ($d[$x][$y] > 0.5);
+      $score{'Hydrophobic8'}++ if ($d[$x][$y] > 0.75);
    }
    }
    $y++;
