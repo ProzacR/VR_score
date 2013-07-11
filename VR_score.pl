@@ -86,7 +86,7 @@ while (($key, $value) = each %toppoints)
 }
 #print STDERR "\n";
 #print just one term for debug:
-#print STDERR " lHH1: $toppoints{'lHH1'} \n";
+print STDERR " MWs: $toppoints{'MWs'} \n";
 
 
 $main = 0;
@@ -169,10 +169,10 @@ my @d = ();
 #          'HH_33' => 0,
 #          'HH_34' => 0,
 #          'HH_35' => 0,
-          'HH_36' => 0,
+#          'HH_36' => 0,
 #          'HH2_31' => 0,
 #          'HH2_32' => 0,
-          'HH2_33' => 0,
+#          'HH2_33' => 0,
           'HH2_34' => 0,
 #          'HH2_35' => 0,
           'HH2_36' => 0,
@@ -182,12 +182,13 @@ my @d = ();
           #'lHH2_34' => 0,
           #'lHH2_35' => 0,
           #'lHH2_36' => 0,
-          'Gauss1' => 0,
-          'Gauss2' => 0,
-          'Gauss3' => 0,
+#          'Gauss1' => 0,
+#          'Gauss2' => 0,
+#          'Gauss3' => 0,
 #          'Charge' => 0,
-          'Clash' => 0,
+#          'Clash' => 0,
           'MWs' => 0,
+          'SS' => 0,
 #          'noContact1' => 0,
 #          'noContact2' => 0,
 #          'noContact3' => 0,
@@ -197,11 +198,33 @@ my @d = ();
 #          'ZH_34' => 0,
 #          'ZH_35' => 0,
 #          'ZH_36' => 0,
+#          'SO1' => 0,
+#          'SO2' => 0,
+#          'SO3' => 0,
+#          'SO4' => 0,
+          'SO5' => 0,
+#          'SO6' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
           #'Combined' => 1.8 #initial value
            );
+
+
+#MW of ligand
+#respect substructures
+$x = 0;
+while ($ligand_atom[$x]{'atom_type'}[0]) {
+  #print STDERR $ligand_atom[$x]{'subst_id'};
+  $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
+  %ids = ();
+  $id = $ligand_atom[$x]{'subst_id'};
+  $ids{$id} = 1;
+  $x++;
+}
+$score{'SS'} = keys %ids;
+$score{'MWs'} = $score{'MWs'}/$score{'SS'};
+#print STDERR keys %ids;
 
 
 #electrostatic force, d matrix, Gauss and repulsion
@@ -221,16 +244,16 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
   - get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'radius');
   #calculate Gauss1 and Gauss2
   if ($d[$x][$y] < 2) {
-   $score{'Gauss1'} += exp(-2*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
-   $score{'Gauss2'} += exp(-4*($d[$x][$y]**2));
-   $score{'Gauss3'} += exp(-8*($d[$x][$y]**2));
+#   $score{'Gauss1'} += exp(-2*($d[$x][$y]**2)); #means if abs distance 0 then +1 else +less
+#   $score{'Gauss2'} += exp(-4*($d[$x][$y]**2));
+#   $score{'Gauss3'} += exp(-8*($d[$x][$y]**2));
 #   $score{'Gap'}++ if ($d[$x][$y] > 0); # count just gap
 #   $score{'Contact'}++ if (abs($d[$x][$y]) < 0.25);
     if ($d[$x][$y] < 0) {
      #calculate repulsion:
 #     $score{'Repulsion'}++;
      if ($d[$x][$y] < $colision) {
-          $score{'Clash'}++;
+#          $score{'Clash'}++;
           #print STDERR "colision detected! $d[$x][$y]\n";
      }
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
@@ -304,7 +327,7 @@ while($d[$x]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
 #     $score{'Hydrogen21'}++;
-     $score{'Hydrogen22'}++ if ($d[$x][$y] < 0.25);
+#     $score{'Hydrogen22'}++ if ($d[$x][$y] < 0.25);
 #     $score{'Hydrogen23'}++ if (abs($d[$x][$y]) < 0.25);
      $score{'Hydrogen24'}++ if ($d[$x][$y] < -0.25);
 #     $score{'Hydrogen25'}++ if ($d[$x][$y] < 0);
@@ -354,7 +377,7 @@ while($d[$x]) {
      $score{'HH_33'}++ if (abs($d[$x][$y]) < 0.25);
 #     $score{'HH_34'}++ if ($d[$x][$y] < -0.25);
 #     $score{'HH_35'}++ if ($d[$x][$y] < 0);
-     $score{'HH_36'}++ if ($d[$x][$y] > 0.25);
+#     $score{'HH_36'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
@@ -374,7 +397,7 @@ while($d[$x]) {
    if ((abs($protein_atom[$y]{'charge'}) < 0.1) || (get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic'))) {
 #     $score{'HH2_31'}++;
 #     $score{'HH2_32'}++ if ($d[$x][$y] < 0.25);
-     $score{'HH2_33'}++ if (abs($d[$x][$y]) < 0.25);
+#     $score{'HH2_33'}++ if (abs($d[$x][$y]) < 0.25);
      $score{'HH2_34'}++ if ($d[$x][$y] < -0.25);
 #     $score{'HH2_35'}++ if ($d[$x][$y] < 0);
      $score{'HH2_36'}++ if ($d[$x][$y] > 0.25);
@@ -396,11 +419,36 @@ while($d[$x]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if ($protein_atom[$y]{'atom_type'}[0] eq 'Zn') {
 #     $score{'ZH_31'}++;
+#very good score for HCA:
      $score{'ZH_32'}++ if ($d[$x][$y] < 0.25);
+     #print STDERR $ligand_atom[$x]{'atom_type'}[0];
 #     $score{'ZH_33'}++ if (abs($d[$x][$y]) < 0.25);
-#     $score{'ZH_34'}++ if ($d[$x][$y] < -0.25);
-#     $score{'ZH_35'}++ if ($d[$x][$y] < 0);
-#     $score{'ZH_36'}++ if ($d[$x][$y] > 0.25);
+#     $score{'ZH_34'}++ if ($d[$x][$y] < 0.2);
+#     $score{'ZH_35'}++ if ($d[$x][$y] < 0.1);
+#     $score{'ZH_36'}++ if ($d[$x][$y] < 0.05);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#S.O2
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if (($ligand_atom[$x]{'atom_type'}[0] eq 'S') && ($ligand_atom[$x]{'atom_type'}[1] eq 'O2')) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ((abs($protein_atom[$y]{'charge'}) > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
+#     $score{'SO1'}++;
+#     $score{'SO2'}++ if ($d[$x][$y] < 0.25);
+#     $score{'SO3'}++ if (abs($d[$x][$y]) < 0.25);
+#     $score{'SO4'}++ if ($d[$x][$y] < -0.25);
+     $score{'SO5'}++ if ($d[$x][$y] < 0);
+#     $score{'SO6'}++ if ($d[$x][$y] < -0.1);
    }
    }
    $y++;
@@ -430,14 +478,6 @@ $x++;
 # $score{'noContact3'}++ if !($contact3);
 #$x++;
 #}
-
-
-#MW of ligand
-$x = 0;
-while ($ligand_atom[$x]{'atom_type'}[0]) {
-  $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
-  $x++;
-}
 
 
 ##dSASA
