@@ -148,6 +148,8 @@ my @d = ();
           'Hydrophobic6' => 0,
           'Hydrophobic7' => 0,
           'Hydrophobic8' => 0,
+          'Hydrophobic9' => 0,
+          'Hydrophobic10' => 0,
 #          'Hydrogen11' => 0,
 #          'Hydrogen12' => 0,
 #          'Hydrogen13' => 0,
@@ -286,6 +288,8 @@ while($d[$x]) {
       $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
       $score{'Hydrophobic7'}++ if ($d[$x][$y] > 0.5);
       $score{'Hydrophobic8'}++ if ($d[$x][$y] > 0.75);
+      $score{'Hydrophobic9'}++ if ($d[$x][$y] > 1);
+      $score{'Hydrophobic10'}++ if ($d[$x][$y] > 1.25);
    }
    }
    $y++;
