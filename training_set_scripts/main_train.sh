@@ -16,7 +16,7 @@ x=$((x + 1));
 done
 ./train.sh > result_${x}.csv;
 awk 'NR == 1' result_${x}.csv | sed -r 's/^.{4}//' > result_${x}c.csv;
-awk '/^[0-9,.]+$/' result_${x}.csv >> result_${x}c.csv
+awk '/^[0-9,.-]+$/' result_${x}.csv >> result_${x}c.csv
 R --no-save --args result_${x}c.csv < train.R
 mv plot.png result_${x}.png
 feh result_${x}.png &
