@@ -11,7 +11,7 @@
 
 
 x=1
-while [ -e result_${x}.csv ]; do
+while [ -e result_${x}.png ]; do
 x=$((x + 1));
 done
 ./train.sh > result_${x}.csv;
