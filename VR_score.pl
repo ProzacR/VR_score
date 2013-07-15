@@ -148,7 +148,7 @@ my @d = ();
 #          'Hydrophobic6' => 0,
 #          'Hydrophobic7' => 0,
 #          'Hydrophobic8' => 0,
-          'Hydrophobic9' => 0,
+#          'Hydrophobic9' => 0,
 #          'Hydrophobic10' => 0,
 #          'Hydrogen11' => 0,
 #          'Hydrogen12' => 0,
@@ -157,8 +157,8 @@ my @d = ();
 #          'Hydrogen15' => 0,
 #          'Hydrogen16' => 0,
           'Hydrogen21' => 0,
-          'Hydrogen22' => 0,
-          'Hydrogen23' => 0,
+#          'Hydrogen22' => 0,
+#          'Hydrogen23' => 0,
           'Hydrogen24' => 0,
           'Hydrogen25' => 0,
           'Hydrogen26' => 0,
@@ -177,9 +177,9 @@ my @d = ();
 #          'HH2_31' => 0,
 #          'HH2_32' => 0,
 #          'HH2_33' => 0,
-          'HH2_34' => 0,
+#          'HH2_34' => 0,
 #          'HH2_35' => 0,
-          'HH2_36' => 0,
+#          'HH2_36' => 0,
 #          'lHH1' => 0,
           #'lHH2' => 0,
           #'lHH2_33' => 0,
@@ -190,7 +190,7 @@ my @d = ();
           'Gauss2' => 0,
           'Gauss3' => 0,
 #          'Charge' => 0,
-          'Clash' => 0,
+#          'Clash' => 0,
           'MWs' => 0,
 #          'noContact1' => 0,
 #          'noContact2' => 0,
@@ -256,7 +256,7 @@ while($ligand_atom[$x]{'atom_type'}[0]) {
      #calculate repulsion:
 #     $score{'Repulsion'}++;
      if ($d[$x][$y] < $colision) {
-          $score{'Clash'}++;
+#          $score{'Clash'}++;
           #print STDERR "colision detected! $d[$x][$y]\n";
      }
      #print STDERR "\n $ligand_atom[$x]{'atom_id'} repeals $protein_atom[$y]{'atom_id'}\n";
@@ -288,7 +288,7 @@ while($d[$x]) {
 #      $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
 #      $score{'Hydrophobic7'}++ if ($d[$x][$y] > 0.5);
 #      $score{'Hydrophobic8'}++ if ($d[$x][$y] > 0.75);
-      $score{'Hydrophobic9'}++ if ($d[$x][$y] > 1);
+#      $score{'Hydrophobic9'}++ if ($d[$x][$y] > 1);
 #      $score{'Hydrophobic10'}++ if ($d[$x][$y] > 1.25);
    }
    }
@@ -334,8 +334,8 @@ while($d[$x]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if (($protein_atom[$y]{'charge'} > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
      $score{'Hydrogen21'}++;
-     $score{'Hydrogen22'}++ if ($d[$x][$y] < 0.25);
-     $score{'Hydrogen23'}++ if (abs($d[$x][$y]) < 0.25);
+#     $score{'Hydrogen22'}++ if ($d[$x][$y] < 0.25);
+#     $score{'Hydrogen23'}++ if (abs($d[$x][$y]) < 0.25);
      $score{'Hydrogen24'}++ if ($d[$x][$y] < -0.25);
      $score{'Hydrogen25'}++ if ($d[$x][$y] < 0);
      $score{'Hydrogen26'}++ if ($d[$x][$y] > 0.25);
@@ -405,9 +405,9 @@ while($d[$x]) {
 #     $score{'HH2_31'}++;
 #     $score{'HH2_32'}++ if ($d[$x][$y] < 0.25);
 #     $score{'HH2_33'}++ if (abs($d[$x][$y]) < 0.25);
-     $score{'HH2_34'}++ if ($d[$x][$y] < -0.25);
+#     $score{'HH2_34'}++ if ($d[$x][$y] < -0.25);
 #     $score{'HH2_35'}++ if ($d[$x][$y] < 0);
-     $score{'HH2_36'}++ if ($d[$x][$y] > 0.25);
+#     $score{'HH2_36'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
