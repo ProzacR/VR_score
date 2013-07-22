@@ -207,7 +207,7 @@ my @d = ();
 #          'SO4' => 0,
           'SO5' => 0,
 #          'SO6' => 0,
-           'SS' => 0,
+#          'SS' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -228,8 +228,9 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
 }
 #print STDERR Dumper \%ids;
 $SS = keys %ids;
-$score{'SS'} = $SS;
+#$score{'SS'} = $SS;
 $score{'MWs'} = $score{'MWs'}/$SS;
+die ("multilig!") if ($SS != 1);
 
 
 #electrostatic force, d matrix, Gauss and repulsion
