@@ -207,6 +207,7 @@ my @d = ();
 #          'SO4' => 0,
           'SO5' => 0,
 #          'SO6' => 0,
+           'SS' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -217,17 +218,18 @@ my @d = ();
 #MW of ligand
 #respect substructures
 $x = 0;
+%ids = ();
 while ($ligand_atom[$x]{'atom_type'}[0]) {
   #print STDERR $ligand_atom[$x]{'subst_id'};
   $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
-  %ids = ();
   $id = $ligand_atom[$x]{'subst_id'};
   $ids{$id} = 1;
   $x++;
 }
+#print STDERR Dumper \%ids;
 $SS = keys %ids;
-#$score{'MWs'} = $score{'MWs'}/$SS;
-#print STDERR keys %ids;
+$score{'SS'} = $SS;
+$score{'MWs'} = $score{'MWs'}/$SS;
 
 
 #electrostatic force, d matrix, Gauss and repulsion
@@ -518,7 +520,7 @@ $x++;
 ##* by Weight and calculate combined score
 foreach my $key ( keys %score )
 {
-   $score{$key} = $score{$key}/$SS;
+   #$score{$key} = $score{$key}/$SS;
    #if ($key ne 'Combined') {
    # $score{$key} *= $Weight{$key};
    # $score{'Combined'} += $score{$key};
