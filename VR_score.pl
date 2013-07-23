@@ -142,13 +142,13 @@ my @d = ();
 #          'Gap' => 0,
           'Hydrophobic1' => 0,
 #          'Hydrophobic2' => 0,
-#          'Hydrophobic3' => 0,
+          'Hydrophobic3' => 0,
 #          'Hydrophobic4' => 0,
           'Hydrophobic5' => 0,
 #          'Hydrophobic6' => 0,
 #          'Hydrophobic7' => 0,
 #          'Hydrophobic8' => 0,
-#          'Hydrophobic9' => 0,
+          'Hydrophobic9' => 0,
 #          'Hydrophobic10' => 0,
 #          'Hydrogen11' => 0,
 #          'Hydrogen12' => 0,
@@ -201,11 +201,11 @@ my @d = ();
 #          'ZH_34' => 0,
 #          'ZH_35' => 0,
 #          'ZH_36' => 0,
-#          'SO1' => 0,
+          'SO1' => 0,
 #          'SO2' => 0,
 #          'SO3' => 0,
 #          'SO4' => 0,
-          'SO5' => 0,
+#          'SO5' => 0,
 #          'SO6' => 0,
 #          'SS' => 0,
           #'SASA1' => 0,
@@ -285,13 +285,13 @@ while($d[$x]) {
     #if ($d[$x][$y] < 0.5) {
       $score{'Hydrophobic1'}++;
 #      $score{'Hydrophobic2'}++ if ($d[$x][$y] < 0.25);
-#      $score{'Hydrophobic3'}++ if (abs($d[$x][$y]) < 0.25);
+      $score{'Hydrophobic3'}++ if (abs($d[$x][$y]) < 0.25);
 #      $score{'Hydrophobic4'}++ if ($d[$x][$y] < -0.25);
       $score{'Hydrophobic5'}++ if ($d[$x][$y] < 0);
 #      $score{'Hydrophobic6'}++ if ($d[$x][$y] > 0.25);
 #      $score{'Hydrophobic7'}++ if ($d[$x][$y] > 0.5);
 #      $score{'Hydrophobic8'}++ if ($d[$x][$y] > 0.75);
-#      $score{'Hydrophobic9'}++ if ($d[$x][$y] > 1);
+      $score{'Hydrophobic9'}++ if ($d[$x][$y] > 1);
 #      $score{'Hydrophobic10'}++ if ($d[$x][$y] > 1.25);
    }
    }
@@ -453,11 +453,11 @@ while($d[$x]) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if ((abs($protein_atom[$y]{'charge'}) > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
-#     $score{'SO1'}++;
+     $score{'SO1'}++;
 #     $score{'SO2'}++ if ($d[$x][$y] < 0.25);
 #     $score{'SO3'}++ if (abs($d[$x][$y]) < 0.25);
 #     $score{'SO4'}++ if ($d[$x][$y] < -0.25);
-     $score{'SO5'}++ if ($d[$x][$y] < 0);
+#     $score{'SO5'}++ if ($d[$x][$y] < 0);
 #     $score{'SO6'} = $score{'SO5'}/$SS;
    }
    }
