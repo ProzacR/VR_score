@@ -169,9 +169,9 @@ my @d = ();
 #          'Hydrogen35' => 0,
 #          'Hydrogen36' => 0,
 #          'HH_31' => 0,
-#          'HH_32' => 0,
+          'HH_32' => 0,
 #          'HH_33' => 0,
-#          'HH_34' => 0,
+          'HH_34' => 0,
 #          'HH_35' => 0,
 #          'HH_36' => 0,
 #          'HH2_31' => 0,
@@ -383,9 +383,9 @@ while($d[$x]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if ((abs($protein_atom[$y]{'charge'}) > 0.1) || !(get_atom_parameter::get_atom_parameter($protein_atom[$y]{'atom_type'}[0], 'hydrophobic'))) {
 #     $score{'HH_31'}++;
-#     $score{'HH_32'}++ if ($d[$x][$y] < 0.25);
-     $score{'HH_33'}++ if (abs($d[$x][$y]) < 0.25);
-#     $score{'HH_34'}++ if ($d[$x][$y] < -0.25);
+     $score{'HH_32'}++ if ($d[$x][$y] < 0.25);
+#     $score{'HH_33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'HH_34'}++ if ($d[$x][$y] < -0.25);
 #     $score{'HH_35'}++ if ($d[$x][$y] < 0);
 #     $score{'HH_36'}++ if ($d[$x][$y] > 0.25);
    }
