@@ -208,6 +208,12 @@ my @d = ();
 #          'SO5' => 0,
 #          'SO6' => 0,
 #          'SS' => 0,
+          'AA1' => 0,
+#          'AA2' => 0,
+#          'AA3' => 0,
+#          'AA4' => 0,
+          'AA5' => 0,
+#          'AA6' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -459,6 +465,29 @@ while($d[$x]) {
 #     $score{'SO4'}++ if ($d[$x][$y] < -0.25);
 #     $score{'SO5'}++ if ($d[$x][$y] < 0);
 #     $score{'SO6'} = $score{'SO5'}/$SS;
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+#ar.-ar.
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if ($ligand_atom[$x]{'atom_type'}[1] eq 'ar') {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ($protein_atom[$y]{'atom_type'}[1] eq 'ar') {
+     $score{'AA1'}++;
+#     $score{'AA2'}++ if ($d[$x][$y] < 0.25);
+#     $score{'AA3'}++ if (abs($d[$x][$y]) < 0.25);
+#     $score{'AA4'}++ if ($d[$x][$y] < -0.25);
+     $score{'AA5'}++ if ($d[$x][$y] < 0);
+#     $score{'AA6'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
