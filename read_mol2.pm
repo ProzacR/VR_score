@@ -87,6 +87,8 @@ $atom_matrix[$x][2] = @{$atoms[$x]}[5];
 
 # atom_type (string) = the SYBYL atom type for the atom
 push @{$atom[$x]{'atom_type'}}, split('\.', @{$atoms[$x]}[6]);
+# always initialize {'atom_type'}[1] to avoid mess:
+$atom[$x]{'atom_type'}[1] = 'no' if !($atom[$x]{'atom_type'}[1]);
 
 # subst_id (integer) = the ID number of the substructure containing the
 # atom.
