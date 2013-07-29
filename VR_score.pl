@@ -197,7 +197,7 @@ my @d = ();
 #          'noContact3' => 0,
 #          'ZH_31' => 0,
           'ZH_32' => 0,
-#          'ZH_33' => 0,
+          'ZH_33' => 0,
 #          'ZH_34' => 0,
 #          'ZH_35' => 0,
 #          'ZH_36' => 0,
@@ -442,7 +442,7 @@ while($d[$x]) {
 #very good score for HCA:
      $score{'ZH_32'}++ if ($d[$x][$y] < 0.25);
      #print STDERR $ligand_atom[$x]{'atom_type'}[0];
-#     $score{'ZH_33'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'ZH_33'}++ if (abs($d[$x][$y]) < 0.25);
 #     $score{'ZH_34'}++ if ($d[$x][$y] < 0.2);
 #     $score{'ZH_35'}++ if ($d[$x][$y] < 0.1);
 #     $score{'ZH_36'}++ if ($d[$x][$y] < 0.05);
