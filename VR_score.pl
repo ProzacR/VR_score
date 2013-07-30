@@ -216,6 +216,8 @@ my @d = ();
 #          'AA6' => 0,
           'C3' => 0,
           'X3' => 0,
+          'N3' => 0,
+          'O3' => 0,
           #'SASA1' => 0,
           #'SASA2' => 0,
           #'SASA3' => 0,
@@ -231,6 +233,8 @@ while ($ligand_atom[$x]{'atom_type'}[0]) {
   #print STDERR $ligand_atom[$x]{'subst_id'};
   $score{'MWs'} += get_atom_parameter::get_atom_parameter($ligand_atom[$x]{'atom_type'}[0], 'MW');
   $score{'C3'} ++ if (($ligand_atom[$x]{'atom_type'}[0] eq 'C') && ($ligand_atom[$x]{'atom_type'}[1] eq '3'));
+  $score{'N3'} ++ if (($ligand_atom[$x]{'atom_type'}[0] eq 'N') && ($ligand_atom[$x]{'atom_type'}[1] eq '3'));
+  $score{'O3'} ++ if (($ligand_atom[$x]{'atom_type'}[0] eq 'O') && ($ligand_atom[$x]{'atom_type'}[1] eq '3'));
   $score{'X3'} ++ if ($ligand_atom[$x]{'atom_type'}[1] eq '3');
   $id = $ligand_atom[$x]{'subst_id'};
   $ids{$id} = 1;
