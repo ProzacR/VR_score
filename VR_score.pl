@@ -214,6 +214,12 @@ my @d = ();
 #          'AA4' => 0,
           'AA5' => 0,
 #          'AA6' => 0,
+#          'AN1' => 0,
+#          'AN2' => 0,
+#          'AN3' => 0,
+          'AN4' => 0,
+          'AN5' => 0,
+          'AN6' => 0,
           'C3' => 0,
           'X3' => 0,
           'N3' => 0,
@@ -496,6 +502,29 @@ while($d[$x]) {
 #     $score{'AA4'}++ if ($d[$x][$y] < -0.25);
      $score{'AA5'}++ if ($d[$x][$y] < 0);
 #     $score{'AA6'}++ if ($d[$x][$y] > 0.25);
+   }
+   }
+   $y++;
+  }
+ }
+$x++;
+}
+
+
+# N - ar.
+$x = 0;
+while($d[$x]) {
+ $y = 0;
+ if (($ligand_atom[$x]{'atom_type'}[0] eq 'N')) {
+  while($d[$x][$y]) {
+   if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
+   if ($protein_atom[$y]{'atom_type'}[1] eq 'ar') {
+#     $score{'AN1'}++;
+#     $score{'AN2'}++ if ($d[$x][$y] < 0.25);
+#     $score{'AN3'}++ if (abs($d[$x][$y]) < 0.25);
+     $score{'AN4'}++ if ($d[$x][$y] < -0.25);
+     $score{'AN5'}++ if ($d[$x][$y] < 0);
+     $score{'AN6'}++ if ($d[$x][$y] > 0.25);
    }
    }
    $y++;
