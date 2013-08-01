@@ -469,7 +469,7 @@ $x++;
 $x = 0;
 while($d[$x]) {
  $y = 0;
- if (($ligand_atom[$x]{'atom_type'}[0] eq 'S') && ($ligand_atom[$x]{'atom_type'}[1] eq 'O2')) {
+ if (($ligand_atom[$x]{'atom_type'}[0] eq 'S') && (($ligand_atom[$x]{'atom_type'}[1] eq 'O2') || ($ligand_atom[$x]{'atom_type'}[1] == 3))) {
   while($d[$x][$y]) {
    if (($colision < $d[$x][$y]) && ($d[$x][$y] < 2)) {
    if ((abs($protein_atom[$y]{'charge'}) > 0.1) && ($protein_atom[$y]{'atom_type'}[0] eq 'H')) {
