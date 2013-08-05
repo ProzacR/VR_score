@@ -76,7 +76,7 @@ while (($key, $value) = each %toppoints)
 }
 #print STDERR "\n";
 #print just one term for debug:
-print STDERR " MWs: $toppoints{'MWs'} \n";
+#print STDERR " MWs: $toppoints{'MWs'} \n";
 
 
 $main = 0;
