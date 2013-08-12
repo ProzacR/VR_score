@@ -622,7 +622,7 @@ foreach my $line (@ligand_foot) {
 }
 
 #ligand file name
-$name = ">out_$points{'Combined'}_$ligand";
+$name = ">out_$points{'Combined'}_" . $main . "_" . $ligand;
 
 
 #print them
