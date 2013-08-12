@@ -65,6 +65,7 @@ die("Ligand has 300+ atoms. Usage: VR_score.pl protein.mol2 ligand.mol2") if (@l
 
 #main function
 %toppoints = score();
+#print all results:
 while (($key, $value) = each %toppoints)
 {
   print "$key", ",";
@@ -82,26 +83,27 @@ while (($key, $value) = each %toppoints)
 $main = 0;
 #move away check score
 while ($main < $move[2]) {
-#score ligand pose in protein and write if better
-%points = score();
-while (($key, $value) = each %points)
-{
-  print "$key", " ", "\n";
-}
-while (($key, $value) = each %points)
-{
-  print $value, "\n";
-}
+# move ligand and score ligand pose in protein
 @ligand_atom_matrix = move::random_move(@ligand_atom_matrix);
-if (($points{'Combined'} < $toppoints{'Combined'}) && ($points{'Clash'} < 1) && ($points{'Repulsion'} > -30)) {
- print STDERR "\n writing ligand...\n\n";
- write_ligand();
- %toppoints = %points;
+%points = score();
+print "\nmoved!\n";
+while (($key, $value) = each %points)
+{
+  print "$key", ",";
 }
+print "\n";
+while (($key, $value) = each %points)
+{
+  print $value, ",";
+}
+#if ($points{'Combined'} < $toppoints{'Combined'}) {
+print "\nwriting ligand...\n";
+write_ligand();
+# %toppoints = %points;
+#}
 #print STDERR Dumper \@ligand_atom_matrix[0];
 $main++;
 }
-#write_ligand();
 
 
 ##############################
