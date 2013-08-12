@@ -47,7 +47,8 @@ return @$ref;
 sub rotate_ligand {
 my $ref = $_[0];
 my $x = 0;
-my $step = pi/8;
+my $step = pi/16;
+
 
 #print STDERR Dumper \@$ref;
 @rotation_point = ($$ref[$x][0], $$ref[$x][1], $$ref[$x][2]);
@@ -58,7 +59,7 @@ $$ref[$x][1] -= $rotation_point[1];
 $$ref[$x][2] -= $rotation_point[2];
 $x++;
 }
-print STDERR Dumper \@$ref;
+#print STDERR Dumper \@$ref;
 
 
 $x = 0;
@@ -95,7 +96,7 @@ print STDERR "rotz\n";
 }
 
 
-print STDERR Dumper \@$ref;
+#print STDERR Dumper \@$ref;
 #move to initial location:
 $x = 0;
 while (defined($$ref[$x][0])) {
@@ -106,7 +107,7 @@ $x++;
 }
 
 
-print STDERR Dumper \@$ref;
+#print STDERR Dumper \@$ref;
 return @$ref;
 }
 
